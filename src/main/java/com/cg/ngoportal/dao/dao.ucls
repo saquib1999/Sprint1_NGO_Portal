@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <interface id="1" language="java" name="com.capgemini.dao.DonorDao" project="NGODonationPortal" 
+    file="/NGODonationPortal/src/com/capgemini/dao/DonorDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="176" width="265" x="85" y="39"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="2" language="java" name="com.capgemini.dao.NeedyPeopleDao" project="NGODonationPortal" 
+    file="/NGODonationPortal/src/com/capgemini/dao/NeedyPeopleDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="136" width="299" x="390" y="39"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="3" language="java" name="com.capgemini.dao.AdminDao" project="NGODonationPortal" 
+    file="/NGODonationPortal/src/com/capgemini/dao/AdminDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="216" width="358" x="729" y="39"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="4" language="java" name="com.capgemini.dao.EmployeeDao" project="NGODonationPortal" 
+    file="/NGODonationPortal/src/com/capgemini/dao/EmployeeDao.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="216" width="406" x="1127" y="39"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

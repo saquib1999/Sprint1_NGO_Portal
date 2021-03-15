@@ -2,15 +2,21 @@ package com.cg.ngoportal.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "NDonor")
 public class Donor {
 	@Id
+	@GeneratedValue(generator = "NDONORID", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "NDONORID", sequenceName = "NDONOR_ID",allocationSize=1,initialValue = 1000)
+	
 	private int donorId;
 	private String donorName;
 	private String donorEmail;
@@ -27,10 +33,9 @@ public class Donor {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Donor(int donorId, String donorName, String donorEmail, String donorPhone, String donorUsername,
+	public Donor(String donorName, String donorEmail, String donorPhone, String donorUsername,
 			String donorPassword, Address address) {
 		super();
-		this.donorId = donorId;
 		this.donorName = donorName;
 		this.donorEmail = donorEmail;
 		this.donorPhone = donorPhone;

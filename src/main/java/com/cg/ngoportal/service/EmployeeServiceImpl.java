@@ -66,4 +66,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return repo.helpNeedyPerson(distribute);
 	}
 
+	@Override
+	public boolean logout() {
+		// TODO Auto-generated method stub
+		return repo.logout();
+	}
+
 }

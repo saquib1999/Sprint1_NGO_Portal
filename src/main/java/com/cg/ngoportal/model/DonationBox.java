@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Table(name = "NDonationBox")
 public class DonationBox {
 	private String ngoName;
+	
 	@Id
 	private String registrationNumber;
 	private String accountNumber;

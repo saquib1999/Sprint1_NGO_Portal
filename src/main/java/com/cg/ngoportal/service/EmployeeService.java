@@ -15,4 +15,5 @@ public interface EmployeeService {
 	public List<NeedyPeople> findNeedyPeopleByName(String name);
 	public List<NeedyPeople> findAllNeedyPeople();
 	public String helpNeedyPerson(DonationDistribution distribute);
+	public boolean logout();
 }

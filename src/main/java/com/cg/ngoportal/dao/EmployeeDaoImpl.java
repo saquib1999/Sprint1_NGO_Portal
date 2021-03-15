@@ -15,13 +15,14 @@ import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
+import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
 
 public class EmployeeDaoImpl implements EmployeeDao {
 	
 	private boolean loggedIn = true;
-	static private int employeeId;
+	private int employeeId;
 	private EntityManagerFactory emf ;
 	private EntityManager em;
 
@@ -30,6 +31,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		emf = Persistence.createEntityManagerFactory("Project");
 		em = emf.createEntityManager();
+		em.getTransaction().begin();
 		
 		
 		
@@ -38,19 +40,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public int login(String username,String password) throws SQLException, NoSuchEmployeeException {
 		// TODO Auto-generated method stub
-		em.getTransaction().begin();
+//		em.getTransaction().begin();
 		Query q = em.createQuery("select u from User u where u.username = :userName");
 		q.setParameter("userName", username);
 		System.out.println("saquib");
 		User user = (User) q.getSingleResult();
-		q = em.createQuery("select e from Employee e");
-		List<Employee> emps = q.getResultList();
-		emps.forEach(System.out::println);
+		//q = em.createQuery("select e from Employee e");
+		//List<Employee> emps = q.getResultList();
+		//emps.forEach(System.out::println);
 		System.out.println(user);
 		if (user == null)
 			throw new NoSuchEmployeeException();
 		
-		if (username.equals(user.getUsername())) {
+		if (user.getUserType() == UserType.EMPLOYEE) {
 			if(password.equals(user.getPassword())) {
 				loggedIn = true;
 				q = em.createQuery("select e.employeeId from Employee e where e.user.userId = :id");
@@ -76,7 +78,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			
 			if(person.getUser().getUserType() == UserType.NEEDYPERSON) {
 				// TODO Auto-generated method stub
-				em.getTransaction().begin(); // to start inserting in the table
+//				em.getTransaction().begin(); // to start inserting in the table
 				em.persist(person); //to add object data in the table
 				em.getTransaction().commit(); //to commit the table
 				
@@ -91,7 +93,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		// TODO Auto-generated method stub
 		
 		if (loggedIn) {
-			em.getTransaction().begin();
+//			em.getTransaction().begin();
 			NeedyPeople npd = em.find(NeedyPeople.class, person.getNeedyPersonId());
 			if(npd == null) {
 				System.out.println("No Such Needy Person");
@@ -152,10 +154,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				if (distribute.getDistributedBy().getEmployeeId() != employeeId) {
 					return "Distributing Employee Does not match";
 				}
-				em.getTransaction().begin();
-				DonationDistribution dd =  em.find(DonationDistribution.class, distribute);
-				
-				em.persist(distribute);
+//				em.getTransaction().begin();
+				DonationDistribution dd =  em.find(DonationDistribution.class, distribute.getDistributionId());
+				dd.setStatus(DonationDistributionStatus.FUND_DISBURSED);
+				em.merge(dd);
 				em.getTransaction().commit();
 				return dd.getItem().getItem().name();
 			}
@@ -163,6 +165,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				return distribute.getStatus().name();
 		}
 		return null;
+	}
+
+	@Override
+	public DonationDistribution approveDonationEmployeeLevel(Request request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public boolean logout() {
+		// TODO Auto-generated method stub
+		
+		this.loggedIn = false;
+		this.employeeId = (Integer) null;
+		return loggedIn;
+		
 	}
 
 }

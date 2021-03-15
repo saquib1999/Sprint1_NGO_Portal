@@ -4,15 +4,21 @@ import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "NDonation")
 public class Donation {
 	@Id
+	@GeneratedValue(generator = "NDONATIONID", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "NDONATIONID", sequenceName = "NDONATION_ID",allocationSize=1,initialValue = 1000)
+	
 	private int donationId;
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "donor_id", referencedColumnName = "donorId")
@@ -27,9 +33,8 @@ public class Donation {
 	
 	
 	
-	public Donation(int donationId, Donor donor, DonationItem item, double donationAmount, Date donationDate) {
+	public Donation(Donor donor, DonationItem item, double donationAmount, Date donationDate) {
 		super();
-		this.donationId = donationId;
 		this.donor = donor;
 		this.item = item;
 		this.donationAmount = donationAmount;

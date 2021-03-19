@@ -1,11 +1,10 @@
 package com.cg.ngoportal.dao;
 
+import org.springframework.data.repository.CrudRepository;
+
 import com.cg.ngoportal.model.NeedyPeople;
 
-public interface NeedyPeopleDao {
-	public int createNeedyPerson(NeedyPeople person);
-	public boolean readLoginData(NeedyPeople person);
-	public boolean requestForHelp(NeedyPeople person);
+public interface NeedyPeopleDao extends CrudRepository<NeedyPeople, Integer> {
 	
 	
 }

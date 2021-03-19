@@ -1,5 +1,6 @@
 package com.cg.ngoportal.model;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,13 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "NAddress")
+@Embeddable
 public class Address {
-	@Id
-    @GeneratedValue(generator = "NADD_ID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NADD_ID", sequenceName = "NADDID",allocationSize=1, initialValue = 1000)	
-	private int addressId;
 	private String city;
 	private String state;
 	private String pin;
@@ -34,12 +30,6 @@ public class Address {
 	}
 
 
-	public int getAddressId() {
-		return addressId;
-	}
-	public void setAddressId(int addressId) {
-		this.addressId = addressId;
-	}
 	public String getCity() {
 		return city;
 	}
@@ -66,7 +56,7 @@ public class Address {
 	}
 	@Override
 	public String toString() {
-		return "Address [addressId=" + addressId + ", city=" + city + ", state=" + state + ", pin=" + pin
+		return "Address [city=" + city + ", state=" + state + ", pin=" + pin
 				+ ", landmark=" + landmark + "]";
 	}
 	

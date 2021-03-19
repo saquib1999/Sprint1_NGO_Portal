@@ -17,15 +17,12 @@ public class Donor {
 	@GeneratedValue(generator = "NDONORID", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NDONORID", sequenceName = "NDONOR_ID",allocationSize=1,initialValue = 1000)
 	
-	private int donorId;
-	private String donorName;
-	private String donorEmail;
-	private String donorPhone;
-	private String donorUsername;
-	private String donorPassword;
-	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
+	private int id;
+	private String name;
+	private String email;
+	private String phone;
+	@OneToOne
+	private User userLoginDetails;
 	private Address address;
 
 	
@@ -33,64 +30,80 @@ public class Donor {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Donor(String donorName, String donorEmail, String donorPhone, String donorUsername,
-			String donorPassword, Address address) {
+	
+	public Donor(String name, String email, String phone, User userLoginDetails, Address address) {
 		super();
-		this.donorName = donorName;
-		this.donorEmail = donorEmail;
-		this.donorPhone = donorPhone;
-		this.donorUsername = donorUsername;
-		this.donorPassword = donorPassword;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.userLoginDetails = userLoginDetails;
 		this.address = address;
 	}
-	public int getDonorId() {
-		return donorId;
+
+
+	
+	public int getId() {
+		return id;
 	}
-	public void setDonorId(int donorId) {
-		this.donorId = donorId;
+
+
+	public String getName() {
+		return name;
 	}
-	public String getDonorName() {
-		return donorName;
+
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	public void setDonorName(String donorName) {
-		this.donorName = donorName;
+
+
+	public String getEmail() {
+		return email;
 	}
-	public String getDonorEmail() {
-		return donorEmail;
+
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public void setDonorEmail(String donorEmail) {
-		this.donorEmail = donorEmail;
+
+
+	public String getPhone() {
+		return phone;
 	}
-	public String getDonorPhone() {
-		return donorPhone;
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-	public void setDonorPhone(String donorPhone) {
-		this.donorPhone = donorPhone;
+
+
+	public User getUserLoginDetails() {
+		return userLoginDetails;
 	}
-	public String getDonorUsername() {
-		return donorUsername;
+
+
+	public void setUserLoginDetails(User userLoginDetails) {
+		this.userLoginDetails = userLoginDetails;
 	}
-	public void setDonorUsername(String donorUsername) {
-		this.donorUsername = donorUsername;
-	}
-	public String getDonorPassword() {
-		return donorPassword;
-	}
-	public void setDonorPassword(String donorPassword) {
-		this.donorPassword = donorPassword;
-	}
+
+
 	public Address getAddress() {
 		return address;
 	}
+
+
 	public void setAddress(Address address) {
 		this.address = address;
 	}
+
+
 	@Override
 	public String toString() {
-		return "Donor [donorId=" + donorId + ", donorName=" + donorName + ", donorEmail=" + donorEmail + ", donorPhone="
-				+ donorPhone + ", donorUsername=" + donorUsername + ", donorPassword=" + donorPassword + ", address="
-				+ address + "]";
+		return "Donor [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", userLoginDetails="
+				+ userLoginDetails + ", address=" + address + "]";
 	}
+
+
 	
 	
 }

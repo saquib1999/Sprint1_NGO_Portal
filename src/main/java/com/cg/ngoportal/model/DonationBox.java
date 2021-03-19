@@ -1,7 +1,10 @@
 package com.cg.ngoportal.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -10,7 +13,10 @@ public class DonationBox {
 	private String ngoName;
 	
 	@Id
-	private String registrationNumber;
+	@GeneratedValue(generator = "NADMINID", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "NADMINID", sequenceName = "NADMIN_ID",allocationSize=1,initialValue = 1000)
+	
+	private int registrationNumber;
 	private String accountNumber;
 	private double totalCollection;
 	
@@ -19,10 +25,9 @@ public class DonationBox {
 	}
 	
 	
-	public DonationBox(String ngoName, String registrationNumber, String accountNumber, double totalCollection) {
+	public DonationBox(String ngoName, String accountNumber, double totalCollection) {
 		super();
 		this.ngoName = ngoName;
-		this.registrationNumber = registrationNumber;
 		this.accountNumber = accountNumber;
 		this.totalCollection = totalCollection;
 	}
@@ -32,12 +37,12 @@ public class DonationBox {
 	public void setNgoName(String ngoName) {
 		this.ngoName = ngoName;
 	}
-	public String getRegistrationNumber() {
+	
+	public int getRegistrationNumber() {
 		return registrationNumber;
 	}
-	public void setRegistrationNumber(String registrationNumber) {
-		this.registrationNumber = registrationNumber;
-	}
+
+
 	public String getAccountNumber() {
 		return accountNumber;
 	}

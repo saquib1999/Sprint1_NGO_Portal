@@ -14,16 +14,16 @@ public class Admin {
 	@GeneratedValue(generator = "NADMINID", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NADMINID", sequenceName = "NADMIN_ID",allocationSize=1,initialValue = 1000)
 	
-	private int adminId;
-	private String adminUsername;
-	private String adminPassword;
+	private int id;
+	private String username;
+	private String password;
 
 	
 	
 	public Admin(String adminUsername, String adminPassword) {
 		super();
-		this.adminUsername = adminUsername;
-		this.adminPassword = adminPassword;
+		this.username = adminUsername;
+		this.password = adminPassword;
 	}
 	
 	public Admin() {
@@ -31,26 +31,26 @@ public class Admin {
 	}
 	
 	public int getAdminId() {
-		return adminId;
+		return id;
 	}
 	public void setAdminId(int adminId) {
-		this.adminId = adminId;
+		this.id = adminId;
 	}
 	public String getAdminUsername() {
-		return adminUsername;
+		return username;
 	}
 	public void setAdminUsername(String adminUsername) {
-		this.adminUsername = adminUsername;
+		this.username = adminUsername;
 	}
 	public String getAdminPassword() {
-		return adminPassword;
+		return password;
 	}
 	public void setAdminPassword(String adminPassword) {
-		this.adminPassword = adminPassword;
+		this.password = adminPassword;
 	}
 	@Override
 	public String toString() {
-		return "Admin [adminId=" + adminId + ", adminUsername=" + adminUsername + ", adminPassword=" + adminPassword
+		return "Admin [adminId=" + id + ", adminUsername=" + username + ", adminPassword=" + password
 				+ "]";
 	}
 	

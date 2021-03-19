@@ -13,12 +13,12 @@ import javax.persistence.Table;
 public class DonationItem {
 	@Id
 	@GeneratedValue(generator = "NITEM_ID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NITEM_ID", sequenceName = "NITEMID",allocationSize=1, initialValue = 1000)	
+    @SequenceGenerator(name = "NITEM_ID", sequenceName = "NITEMID",allocationSize=1, initialValue = 1)	
 
-	private int itemId;
+	private int id;
 	
 	private DonationType item;
-	private String itemDescription;
+	private String description;
 	
 	
 	
@@ -27,18 +27,15 @@ public class DonationItem {
 	}
 	
 	
-	public DonationItem(DonationType item, String itemDescription) {
+	public DonationItem(DonationType item, String description) {
 		super();
 		this.item = item;
-		this.itemDescription = itemDescription;
+		this.description = description;
 	}
 
 
-	public int getItemId() {
-		return itemId;
-	}
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
+	public int getId() {
+		return id;
 	}
 	public DonationType getItem() {
 		return item;
@@ -46,15 +43,20 @@ public class DonationItem {
 	public void setItem(DonationType item) {
 		this.item = item;
 	}
-	public String getItemDescription() {
-		return itemDescription;
+	
+	public String getDescription() {
+		return description;
 	}
-	public void setItemDescription(String itemDescription) {
-		this.itemDescription = itemDescription;
+
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
+
+
 	@Override
 	public String toString() {
-		return "DonationItem [itemId=" + itemId + ", item=" + item + ", itemDescription=" + itemDescription + "]";
+		return "DonationItem [itemId=" + id + ", item=" + item + ", description=" + description + "]";
 	}
 	
 	

@@ -23,19 +23,16 @@ public class DonationDistribution {
 	private int distributionId;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "needyPerson_Id", referencedColumnName = "needyPersonId")
-
 	private NeedyPeople person;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id", referencedColumnName = "itemId")
-
-
 	private DonationItem item;
+	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Employee_Id", referencedColumnName = "employeeId")
 	private Employee distributedBy;
+	
 	private double amountDistributed;
+	
 	private Date dateOfDistribution;
 	private Date approvalOrRejectedDate;
 	private DonationDistributionStatus status;

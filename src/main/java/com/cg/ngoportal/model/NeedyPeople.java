@@ -16,18 +16,14 @@ public class NeedyPeople {
 	@Id
     @GeneratedValue(generator = "NNP", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NNP", sequenceName = "NN_P",allocationSize=1,initialValue = 1000)
-	private int needyPersonId;
-	private String needyPersonName;
+	private int id;
+	private String name;
 	private String phone;
 	private double familyIncome;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	//@JoinColumn( referencedColumnName = "userId")
-	private User userDetails;
+	private User userLoginDetails;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
-
 	private Address address;
 	
 	
@@ -37,37 +33,60 @@ public class NeedyPeople {
 	
 	
 
-	public NeedyPeople(String needyPersonName, String phone, double familyIncome, User user, Address address) {
+
+
+	public NeedyPeople(String name, String phone, double familyIncome, User userLoginDetails,
+			Address address) {
 		super();
-		this.needyPersonName = needyPersonName;
+		this.name = name;
 		this.phone = phone;
 		this.familyIncome = familyIncome;
-		this.userDetails = user;
+		this.userLoginDetails = userLoginDetails;
 		this.address = address;
 	}
 
 
 
-	public User getUser() {
-		return userDetails;
+
+
+	
+
+	public String getName() {
+		return name;
 	}
 
-	public void setUser(User user) {
-		this.userDetails = user;
+
+
+
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public int getNeedyPersonId() {
-		return needyPersonId;
+
+
+
+
+	public int getId() {
+		return id;
 	}
-	public void setNeedyPersonId(int needyPersonId) {
-		this.needyPersonId = needyPersonId;
+
+
+
+	public User getUserLoginDetails() {
+		return userLoginDetails;
 	}
-	public String getNeedyPersonName() {
-		return needyPersonName;
+
+
+
+
+
+	public void setUserLoginDetails(User userLoginDetails) {
+		this.userLoginDetails = userLoginDetails;
 	}
-	public void setNeedyPersonName(String needyPersonName) {
-		this.needyPersonName = needyPersonName;
-	}
+
+
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -87,12 +106,16 @@ public class NeedyPeople {
 		this.address = address;
 	}
 
+
+
+
+
 	@Override
 	public String toString() {
-		return "NeedyPeople [needyPersonId=" + needyPersonId + ", needyPersonName=" + needyPersonName + ", phone="
-				+ phone + ", familyIncome=" + familyIncome + ", user=" + userDetails + ", address=" + address + "]";
+		return "NeedyPeople [id=" + id + ", name=" + name + ", phone=" + phone + ", familyIncome=" + familyIncome
+				+ ", userLoginDetails=" + userLoginDetails + ", address=" + address + "]";
 	}
-	
+
 	
 	
 	

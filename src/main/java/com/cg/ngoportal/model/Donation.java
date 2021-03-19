@@ -17,16 +17,12 @@ import javax.persistence.Table;
 public class Donation {
 	@Id
 	@GeneratedValue(generator = "NDONATIONID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NDONATIONID", sequenceName = "NDONATION_ID",allocationSize=1,initialValue = 1000)
+    @SequenceGenerator(name = "NDONATIONID", sequenceName = "NDONATION_ID",allocationSize=1,initialValue = 1)
 	
 	private int donationId;
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "donor_id", referencedColumnName = "donorId")
-
 	private Donor donor;
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id", referencedColumnName = "itemId")
-
 	private DonationItem item;
 	private double donationAmount;
 	private Date donationDate;
@@ -46,9 +42,6 @@ public class Donation {
 	}
 	public int getDonationId() {
 		return donationId;
-	}
-	public void setDonationId(int donationId) {
-		this.donationId = donationId;
 	}
 	public Donor getDonor() {
 		return donor;

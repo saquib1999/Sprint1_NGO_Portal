@@ -14,7 +14,7 @@ public class User {
 	@Id
     @GeneratedValue(generator = "NUSER_ID", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NUSER_ID", sequenceName = "NUSERID",allocationSize=1,initialValue = 1000)
-	private int userId;
+	private int id;
 	
 	@Column(unique=true)
 	private String username;
@@ -32,12 +32,8 @@ public class User {
 		this.userType = userType;
 	}
 
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public int getId() {
+		return id;
 	}
 
 	public String getUsername() {
@@ -66,7 +62,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", userType=" + userType
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", userType=" + userType
 				+ "]";
 	}
 	

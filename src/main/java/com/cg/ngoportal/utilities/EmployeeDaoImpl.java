@@ -1,14 +1,19 @@
-package com.cg.ngoportal.dao;
+package com.cg.ngoportal.utilities;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.model.DonationDistribution;
@@ -19,7 +24,8 @@ import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
 
-public class EmployeeDaoImpl implements EmployeeDao {
+@Repository
+public class EmployeeDaoImpl  {
 	
 	private boolean loggedIn = true;
 	private int employeeId;
@@ -37,7 +43,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 	}
 
-	@Override
+	//@Override
 	public int login(String username,String password) throws SQLException, NoSuchEmployeeException {
 		// TODO Auto-generated method stub
 //		em.getTransaction().begin();
@@ -72,8 +78,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return 0;
 	}
 
-	@Override
-	public int createNeedyPerson(NeedyPeople person) {
+	//@Override
+	public NeedyPeople createNeedyPerson(NeedyPeople person) {
 		if (loggedIn) {
 			
 			if(person.getUser().getUserType() == UserType.NEEDYPERSON) {
@@ -82,14 +88,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				em.persist(person); //to add object data in the table
 				em.getTransaction().commit(); //to commit the table
 				
-				return 1;   
+				return person; 
 			}
 		}
-		return 0;
+		return null;
 	}
 
-	@Override
-	public int deleteNeedyPerson(NeedyPeople person) {
+//	@Override
+	public NeedyPeople deleteNeedyPerson(NeedyPeople person) {
 		// TODO Auto-generated method stub
 		
 		if (loggedIn) {
@@ -97,17 +103,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			NeedyPeople npd = em.find(NeedyPeople.class, person.getNeedyPersonId());
 			if(npd == null) {
 				System.out.println("No Such Needy Person");
-				return 0;
+				return null;
 				}
 			em.remove(npd);
 			em.getTransaction().commit();
-			return 1;
+			return npd;
 			
 		}
-		return 0;
+		return null;
 	}
 
-	@Override
+	//@Override
 	public NeedyPeople readNeedyPeopleById(int id) {
 		// TODO Auto-generated method stub
 		NeedyPeople np;
@@ -119,21 +125,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return null;
 	}
 
-	@Override
+	//@Override
 	public List<NeedyPeople> readNeedyPeopleByName(String name) {
 		if (loggedIn) {
 			// TODO Auto-generated method stub
 			Query query = em.createQuery("Select n from NeedyPeople n where n.needyPersonName like :name");
 			query.setParameter("name", name);
 			List<NeedyPeople> list = query.getResultList();
-			System.out.println("333333333333");
-			list.forEach(System.out::println);
+//			System.out.println("333333333333");
+//			list.forEach(System.out::println);
 			return list;
 		}
 		return null;
 	}
 
-	@Override
+	//@Override
 	public List<NeedyPeople> readAllNeedyPeople() {
 		if (loggedIn) {
 			// TODO Auto-generated method stub
@@ -145,7 +151,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return null;
 	}
 
-	@Override
+	//@Override
 	public String helpNeedyPerson(DonationDistribution distribute) {
 		if (loggedIn) {
 			// TODO Auto-generated method stub
@@ -167,13 +173,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return null;
 	}
 
-	@Override
+	//@Override
 	public DonationDistribution approveDonationEmployeeLevel(Request request) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	@Override
+//	@Override
 	public boolean logout() {
 		// TODO Auto-generated method stub
 		

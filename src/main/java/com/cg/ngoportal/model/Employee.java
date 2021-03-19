@@ -14,22 +14,20 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "NEmployee")//,uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
+@Table(name = "NEmployee")
 public class Employee {
-	@Id //@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id 
 	@GeneratedValue(generator = "NEMPID", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "NEMPID", sequenceName = "NEMP_ID",allocationSize=1,initialValue = 100)
-	private int employeeId;
-	private String employeeName;
+	private int id;
+	private String name;
 	private String email;
 	private String phone;
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "addressId")
-
+	
 	private Address address;
+	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-	private User user;
+	private User userLoginDetails;
 	
 	
 	
@@ -37,61 +35,67 @@ public class Employee {
 		// TODO Auto-generated constructor stub
 		}
 
-	public Employee( String employeeName, String email, String phone, Address address, User user) {
+	public Employee( String employeeName, String email, String phone, Address address, User userLoginDetails) {
 		super();
 		
-		this.employeeName = employeeName;
+		this.name = employeeName;
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
-		this.user = user;
+		this.userLoginDetails = userLoginDetails;
 	}
-	public int getEmployeeId() {
-		return employeeId;
+
+	public int getId() {
+		return id;
 	}
+
 	
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
+	public String getName() {
+		return name;
 	}
-	public String getEmployeeName() {
-		return employeeName;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
-	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getPhone() {
 		return phone;
 	}
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 	public Address getAddress() {
 		return address;
 	}
+
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
 
-	public User getUser() {
-		return user;
+	public User getUserLoginDetails() {
+		return userLoginDetails;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserLoginDetails(User userLoginDetails) {
+		this.userLoginDetails = userLoginDetails;
 	}
 
 	@Override
 	public String toString() {
-		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", email=" + email + ", phone="
-				+ phone + ", address=" + address + ", user=" + user + "]";
+		return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address="
+				+ address + ", userLoginDetails=" + userLoginDetails + "]";
 	}
+	
 	
 	
 	

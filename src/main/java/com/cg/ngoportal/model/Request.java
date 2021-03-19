@@ -35,14 +35,6 @@ public class Request {
 		this.status = RequestStatus.PENDING;
 	}
 
-//	public Request(NeedyPeople needyPerson, DonationType donationType, String quantity, String reason) {
-//		super();
-//		this.needyPerson = needyPerson;
-//		this.donationType = donationType;
-//		this.quantity = quantity;
-//		this.reason = reason;
-//		this.status = RequestStatus.PENDING;
-//	}
 
 	public Request() {
 		super();
@@ -72,13 +64,6 @@ public class Request {
 		this.amountOrQuantity = amount;
 	}
 
-//	public String getQuantity() {
-//		return quantity;
-//	}
-//
-//	public void setQuantity(String quantity) {
-//		this.quantity = quantity;
-//	}
 
 	public String getReason() {
 		return reason;

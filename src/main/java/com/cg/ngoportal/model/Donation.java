@@ -29,49 +29,66 @@ public class Donation {
 	
 	
 	
-	public Donation(Donor donor, DonationItem item, double donationAmount, Date donationDate) {
+	
+	public Donation(Donor donor, DonationItem item, double amount, Date date) {
 		super();
 		this.donor = donor;
 		this.item = item;
-		this.amount = donationAmount;
-		this.date = donationDate;
+		this.amount = amount;
+		this.date = date;
 	}
-	
+
 	public Donation() {
 		// TODO Auto-generated constructor stub
 	}
-	public int getDonationId() {
+	
+	public int getId() {
 		return id;
 	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Donor getDonor() {
 		return donor;
 	}
+
 	public void setDonor(Donor donor) {
 		this.donor = donor;
 	}
+
 	public DonationItem getItem() {
 		return item;
 	}
+
 	public void setItem(DonationItem item) {
 		this.item = item;
 	}
-	public double getDonationAmount() {
+
+	public double getAmount() {
 		return amount;
 	}
-	public void setDonationAmount(double donationAmount) {
-		this.amount = donationAmount;
+
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
-	public Date getDonationDate() {
+
+	public Date getDate() {
 		return date;
 	}
-	public void setDonationDate(Date donationDate) {
-		this.date = donationDate;
+
+	public void setDate(Date date) {
+		this.date = date;
 	}
+
 	@Override
 	public String toString() {
-		return "Donation [donationId=" + id + ", donor=" + donor + ", item=" + item + ", donationAmount="
-				+ amount + ", donationDate=" + date + "]";
+		return "Donation [id=" + id + ", donor=" + donor + ", item=" + item + ", amount=" + amount + ", date=" + date
+				+ "]";
 	}
+
+	
 	
 	
 }

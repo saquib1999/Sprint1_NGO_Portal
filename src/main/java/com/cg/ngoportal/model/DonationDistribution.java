@@ -20,7 +20,7 @@ public class DonationDistribution {
     @GeneratedValue(generator = "NDIS_ID", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NDIS_ID", sequenceName = "NDISID",allocationSize=1, initialValue = 1000)	
 
-	private int distributionId;
+	private int id;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private NeedyPeople person;
@@ -56,12 +56,10 @@ public class DonationDistribution {
 		this.approvalOrRejectedDate = approvalOrRejectedDate;
 		this.status = status;
 	}
-	public int getDistributionId() {
-		return distributionId;
+	public int getId() {
+		return id;
 	}
-	public void setDistributionId(int distributionId) {
-		this.distributionId = distributionId;
-	}
+	
 	public NeedyPeople getPerson() {
 		return person;
 	}
@@ -106,7 +104,7 @@ public class DonationDistribution {
 	}
 	@Override
 	public String toString() {
-		return "DonationDistribution [distributionId=" + distributionId + ", person=" + person + ", item=" + item
+		return "DonationDistribution [distributionId=" + id + ", person=" + person + ", item=" + item
 				+ ", distributedBy=" + distributedBy + ", amountDistributed=" + amountDistributed
 				+ ", dateOfDistribution=" + dateOfDistribution + ", approvalOrRejectedDate=" + approvalOrRejectedDate
 				+ ", status=" + status + "]";

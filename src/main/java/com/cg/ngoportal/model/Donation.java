@@ -19,13 +19,13 @@ public class Donation {
 	@GeneratedValue(generator = "NDONATIONID", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NDONATIONID", sequenceName = "NDONATION_ID",allocationSize=1,initialValue = 1)
 	
-	private int donationId;
+	private int id;
 	@OneToOne(cascade = CascadeType.ALL)
 	private Donor donor;
 	@OneToOne(cascade = CascadeType.ALL)
 	private DonationItem item;
-	private double donationAmount;
-	private Date donationDate;
+	private double amount;
+	private Date date;
 	
 	
 	
@@ -33,15 +33,15 @@ public class Donation {
 		super();
 		this.donor = donor;
 		this.item = item;
-		this.donationAmount = donationAmount;
-		this.donationDate = donationDate;
+		this.amount = donationAmount;
+		this.date = donationDate;
 	}
 	
 	public Donation() {
 		// TODO Auto-generated constructor stub
 	}
 	public int getDonationId() {
-		return donationId;
+		return id;
 	}
 	public Donor getDonor() {
 		return donor;
@@ -56,21 +56,21 @@ public class Donation {
 		this.item = item;
 	}
 	public double getDonationAmount() {
-		return donationAmount;
+		return amount;
 	}
 	public void setDonationAmount(double donationAmount) {
-		this.donationAmount = donationAmount;
+		this.amount = donationAmount;
 	}
 	public Date getDonationDate() {
-		return donationDate;
+		return date;
 	}
 	public void setDonationDate(Date donationDate) {
-		this.donationDate = donationDate;
+		this.date = donationDate;
 	}
 	@Override
 	public String toString() {
-		return "Donation [donationId=" + donationId + ", donor=" + donor + ", item=" + item + ", donationAmount="
-				+ donationAmount + ", donationDate=" + donationDate + "]";
+		return "Donation [donationId=" + id + ", donor=" + donor + ", item=" + item + ", donationAmount="
+				+ amount + ", donationDate=" + date + "]";
 	}
 	
 	

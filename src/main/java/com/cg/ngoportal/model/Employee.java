@@ -35,10 +35,10 @@ public class Employee {
 		// TODO Auto-generated constructor stub
 		}
 
-	public Employee( String employeeName, String email, String phone, Address address, User userLoginDetails) {
+	public Employee( String name, String email, String phone, Address address, User userLoginDetails) {
 		super();
 		
-		this.name = employeeName;
+		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.address = address;

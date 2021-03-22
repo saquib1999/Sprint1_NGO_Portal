@@ -22,6 +22,7 @@ import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.DonationDistribution;
+import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.service.EmployeeService;
@@ -37,7 +38,7 @@ public class EmployeeController {
 	public ResponseEntity<String> login(@RequestBody Login loginCred) throws NoSuchEmployeeException{
 		System.out.println(loginCred);
 		
-		boolean result = employeeService.login(loginCred.getUsername(), loginCred.getPassword());
+		boolean result = employeeService.logIn(loginCred.getUsername(), loginCred.getPassword());
 		
 		return new ResponseEntity<String>("Success",HttpStatus.OK);
 			
@@ -89,7 +90,7 @@ public class EmployeeController {
 	
 	@PostMapping("/employee/approve")
 	public ResponseEntity<DonationDistribution> approveRequest(@RequestBody Request request ) throws UserNotLoggedInException{
-		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistribution(request),HttpStatus.ACCEPTED);
+		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistributionEmployeeLevel(request, new DonationDistribution(new DonationItem())),HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/employee/pending-request")

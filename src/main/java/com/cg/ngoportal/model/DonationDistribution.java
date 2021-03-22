@@ -39,6 +39,12 @@ public class DonationDistribution {
 	
 	
 	
+	public DonationDistribution(DonationItem item) {
+		super();
+		this.item = item;
+	}
+
+
 	public DonationDistribution() {
 		// TODO Auto-generated constructor stub
 	}

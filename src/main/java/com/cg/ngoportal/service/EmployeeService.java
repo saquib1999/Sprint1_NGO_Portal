@@ -19,14 +19,14 @@ import com.cg.ngoportal.model.Request;
 
 @Service
 public interface EmployeeService {
-	public boolean login(String username,String password)throws NoSuchEmployeeException;
+	public boolean logIn(String username,String password)throws NoSuchEmployeeException;
 	public NeedyPeople addNeedyPerson(NeedyPeople person) throws  UserNotLoggedInException, DuplicateNeedyPersonException, InvalidNeedyPersonObjectException;
 	public NeedyPeople removeNeedyPerson(NeedyPeople person) throws UserNotLoggedInException, NoSuchNeedyPersonException;
 	public NeedyPeople findNeedyPeopleById(int id) throws UserNotLoggedInException, NoSuchNeedyPersonException;
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws UserNotLoggedInException;
 	public List<NeedyPeople> findAllNeedyPeople() throws UserNotLoggedInException;
 	public DonationDistribution helpNeedyPerson(DonationDistribution distribute) throws UserNotLoggedInException;
-	public DonationDistribution approveDonationDistribution(Request request) throws UserNotLoggedInException;
+	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException;
 	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException;
 	public List<Request> checkPendingRequests() throws UserNotLoggedInException;
 	public boolean logOut();

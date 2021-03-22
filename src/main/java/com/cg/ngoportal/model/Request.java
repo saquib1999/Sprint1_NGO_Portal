@@ -23,7 +23,7 @@ public class Request {
 	private DonationType donationType;
 	private double amountOrQuantity;
 	private String reason;
-	private RequestStatus status;
+	private RequestStatus status= RequestStatus.PENDING;
 	
 
 	public Request(int needyPersonId, DonationType donationType, double amount, String reason) {
@@ -32,7 +32,7 @@ public class Request {
 		this.donationType = donationType;
 		this.amountOrQuantity = amount;
 		this.reason = reason;
-		this.status = RequestStatus.PENDING;
+		
 	}
 
 

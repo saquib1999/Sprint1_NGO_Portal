@@ -44,26 +44,26 @@ public class EmployeeController {
 		
 	}
 	
-	@PostMapping("/createneedyperson")
+	@PostMapping("/create-needy-person")
 	public ResponseEntity<NeedyPeople> create(@RequestBody NeedyPeople needyPeople) throws  UserNotLoggedInException, DuplicateNeedyPersonException, InvalidNeedyPersonObjectException{
 		return new ResponseEntity<NeedyPeople>(employeeService.addNeedyPerson(needyPeople),HttpStatus.CREATED);
 
 	}
 
 
-	@DeleteMapping("/deleteneedyperson")
+	@DeleteMapping("/delete-needy-person")
 	public ResponseEntity<NeedyPeople> add(@RequestBody NeedyPeople needyPeople) throws UserNotLoggedInException, NoSuchNeedyPersonException {
 		return new ResponseEntity<NeedyPeople>(employeeService.removeNeedyPerson(needyPeople),HttpStatus.ACCEPTED);
 		
 	}
 	
-	@GetMapping("/needypersonbyid/{id}")
+	@GetMapping("/needy-person-by-id/{id}")
 	public ResponseEntity<NeedyPeople> getCustById(@PathVariable("id") int id) throws UserNotLoggedInException, NoSuchNeedyPersonException{
 		NeedyPeople np = employeeService.findNeedyPeopleById(id);
 		return new ResponseEntity<>(np, HttpStatus.FOUND);
 	}
 	
-	@GetMapping("/needypeople")
+	@GetMapping("/needy-people")
 	public ResponseEntity<List<NeedyPeople>> getAllNeedyPeople() throws UserNotLoggedInException{
 		 List<NeedyPeople> npList = employeeService.findAllNeedyPeople();
 		return new ResponseEntity<>(npList,HttpStatus.FOUND);
@@ -75,7 +75,7 @@ public class EmployeeController {
 		return new ResponseEntity<>("Logout Successfully", HttpStatus.OK);
 	}
 	
-	@GetMapping("/needypersonbyname/{name}")
+	@GetMapping("/needy-person-by-name/{name}")
 	public ResponseEntity<List<NeedyPeople>> getAllNeedyPeopleByName(@PathVariable("name" ) String name) throws UserNotLoggedInException{
 		List<NeedyPeople> npList = employeeService.findNeedyPeopleByName(name);
 		return new ResponseEntity<>(npList,HttpStatus.FOUND);
@@ -92,12 +92,12 @@ public class EmployeeController {
 		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistribution(request),HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/employee/pendingrequest")
+	@GetMapping("/employee/pending-request")
 	public ResponseEntity<List<Request>> pendingRequestEmployeeLevel() throws UserNotLoggedInException{
 		return new ResponseEntity<List<Request>>(employeeService.checkPendingRequests(),HttpStatus.FOUND);
 	}
 	
-	@GetMapping("/approvedlist")
+	@GetMapping("/approved-list")
 	public ResponseEntity<List<DonationDistribution>> approvedDonationList() throws UserNotLoggedInException{
 		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(),HttpStatus.FOUND);
 	}

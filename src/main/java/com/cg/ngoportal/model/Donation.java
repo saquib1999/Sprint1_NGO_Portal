@@ -7,9 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -28,9 +26,12 @@ public class Donation {
 	private Date dateOfDonation;
 	
 	
-	
-	
-	
+
+	public Donation(DonationItem item, double amount) {
+		super();
+		this.item = item;
+		this.amount = amount;
+	}
 
 	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation) {
 		super();

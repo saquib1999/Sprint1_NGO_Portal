@@ -9,7 +9,13 @@ public class Login {
     }
 
 
-    public Login(String username, String password) {
+    public Login(String username) {
+		super();
+		this.username = username;
+	}
+
+
+	public Login(String username, String password) {
         super();
         this.username = username;
         this.password = password;

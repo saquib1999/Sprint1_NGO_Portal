@@ -29,13 +29,13 @@ public class DonorExceptionHandler {
 	
 	}
 	
-	/*@ResponseBody
+	@ResponseBody
 	@ExceptionHandler(UserNotLoggedInException.class)
 	ResponseEntity<?> exceptionHandler(UserNotLoggedInException e,WebRequest request){
 		ErrorDetail errorDetail = new ErrorDetail(new Date(), e.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errorDetail, HttpStatus.NOT_FOUND);
 	
-	}*/
+	}
 	
 
 }

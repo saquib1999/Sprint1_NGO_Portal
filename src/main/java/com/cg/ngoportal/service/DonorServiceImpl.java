@@ -2,6 +2,7 @@ package com.cg.ngoportal.service;
 
 
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,8 @@ import com.cg.ngoportal.dao.DonorDao;
 import com.cg.ngoportal.dao.UserDao;
 import com.cg.ngoportal.exception.DuplicateDonorException;
 import com.cg.ngoportal.exception.NoSuchDonorException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Donation;
-import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.Donor;
 import com.cg.ngoportal.model.User;
 
@@ -55,15 +56,16 @@ public class DonorServiceImpl implements DonorService{
 	}
 
 	@Override
-	public Donation donateToNGO(DonationItem item,double amount) {
+	public Donation donateToNGO(Donation donation) {
 		// TODO Auto-generated method stub	
 		if(loggedIn==true) {
-			Donation donation =new Donation(donorId,item,amount,null);
-			donationRepo.save(donation);
-			return donation;
+			donation.setDonorId(donorId);
+			donation.setDateOfDonation(new Date());
+			
+			return donationRepo.save(donation);
 		}
 		else {
-			return null;
+			throw new UserNotLoggedInException("Please Log In");
 		}
 	}
 
@@ -82,7 +84,7 @@ public class DonorServiceImpl implements DonorService{
 	@Override
 	public String forgotPassword(String username) throws NoSuchDonorException {
 		// TODO Auto-generated method stub
-		User user = userRepo.findByUsername(username).orElseThrow();
+		User user = userRepo.findByUsername(username).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
 		return user.getPassword();
 	}
 
@@ -99,8 +101,24 @@ public class DonorServiceImpl implements DonorService{
 
 	@Override
 	public String emailPasswordToDonor(String email) throws NoSuchDonorException {
+		/*SimpleMailMessage message=new SimpleMailMessage();
+		message.setFrom("umang@gmail.com");
+		message.setTo(donor.getEmail());
+		message.setText(donor.getUserLoginDetails().getPassword());
+		message.setSubject("Forgot Password ");
+		mailSender.send(message);*/
 		Donor donor=donorRepo.findByEmail(email).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
 		return donor.getUserLoginDetails().getPassword();
 	}
+
+	@Override
+	public String logOut() {
+		// TODO Auto-generated method stub
+		loggedIn = false;
+		donorId = -1;
+		return "Logged Out!";
+		
+	}
+	
 
 }

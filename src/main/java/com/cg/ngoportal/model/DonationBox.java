@@ -13,8 +13,8 @@ public class DonationBox {
 	private String ngoName;
 	
 	@Id
-	@GeneratedValue(generator = "NADMINID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NADMINID", sequenceName = "NADMIN_ID",allocationSize=1,initialValue = 1000)
+	@GeneratedValue(generator = "NRRN", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "NRRN", sequenceName = "NADMIN_ID",allocationSize=1,initialValue = 1000)
 	
 	private int registrationNumber;
 	private String accountNumber;

@@ -1,10 +1,14 @@
 package com.cg.ngoportal.dao;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.cg.ngoportal.model.User;
 @Repository
-public interface UserDao extends CrudRepository<User, Integer> {
-
+public interface UserDao extends JpaRepository<User, Integer> {
+	
+	Optional<User> findByUsernameAndPassword(String username, String password);
+	Optional<User> findByUsername(String username);
 }

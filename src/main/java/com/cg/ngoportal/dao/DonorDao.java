@@ -2,6 +2,7 @@ package com.cg.ngoportal.dao;
 
 
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +10,6 @@ import com.cg.ngoportal.model.Donor;
 
 
 @Repository
-public interface DonorDao extends CrudRepository<Donor, Integer> {
+public interface DonorDao extends JpaRepository<Donor, Integer> {
 	
 }

@@ -1,4 +1,4 @@
-package com.cg.ngoportal.dao.test;
+package com.cg.ngoportal.services.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 

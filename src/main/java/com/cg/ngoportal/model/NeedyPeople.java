@@ -1,6 +1,7 @@
 package com.cg.ngoportal.model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,6 +11,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
+
+import com.sun.istack.NotNull;
+import com.sun.istack.Nullable;
+
 @Entity
 @Table(name = "NNeedyPeople")
 public class NeedyPeople {
@@ -17,11 +23,18 @@ public class NeedyPeople {
     @GeneratedValue(generator = "NNP", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NNP", sequenceName = "NN_P",allocationSize=1,initialValue = 1000)
 	private int id;
+	
+	@Column(nullable = false)
 	private String name;
+	
+	@Column(nullable = false)
 	private String phone;
+	@Column(nullable = false)
 	private double familyIncome;
 	
+	
 	@OneToOne(cascade = CascadeType.ALL)
+	
 	private User userLoginDetails;
 	
 	private Address address;

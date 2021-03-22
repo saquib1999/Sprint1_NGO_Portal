@@ -10,10 +10,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "NDonationItem")
+@SequenceGenerator(name = "NITEM_ID", sequenceName = "NITEMID",allocationSize=1, initialValue = 1)	
+
 public class DonationItem {
 	@Id
 	@GeneratedValue(generator = "NITEM_ID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NITEM_ID", sequenceName = "NITEMID",allocationSize=1, initialValue = 1)	
 
 	private int id;
 	

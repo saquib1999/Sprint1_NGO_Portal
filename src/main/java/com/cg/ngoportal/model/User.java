@@ -8,6 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
+
+import com.sun.istack.NotNull;
+
 @Entity
 @Table(name = "NUsers")
 public class User {
@@ -16,9 +20,12 @@ public class User {
     @SequenceGenerator(name = "NUSER_ID", sequenceName = "NUSERID",allocationSize=1,initialValue = 1000)
 	private int id;
 	
-	@Column(unique=true)
+	@Column(unique=true,nullable = false)
+	
 	private String username;
+	@Column(nullable = false)
 	private String password;
+	@Column(nullable = false)
 	private UserType userType;
 	
 	public User() {

@@ -2,121 +2,182 @@
 package com.cg.ngoportal.service;
 
 import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
-
+import com.cg.ngoportal.dao.NeedyPeopleDao;
+import com.cg.ngoportal.dao.RequestDao;
+import com.cg.ngoportal.dao.UserDao;
+import com.cg.ngoportal.exception.DuplicateEmployeeException;
+import com.cg.ngoportal.exception.DuplicateNeedyPersonException;
+import com.cg.ngoportal.exception.InvalidNeedyPersonObjectException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
+import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
+import com.cg.ngoportal.model.Address;
 import com.cg.ngoportal.model.DonationDistribution;
+import com.cg.ngoportal.model.DonationDistributionStatus;
+import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
+import com.cg.ngoportal.model.Request;
+import com.cg.ngoportal.model.RequestStatus;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
-	private EmployeeDao repo ;
+	private NeedyPeopleDao needyPeopleRepo ;
+	@Autowired
+	private EmployeeDao employeeRepo; 
+	@Autowired
+	private DonationDistributionDao donationDistributionRepo;
+	
+	@Autowired
+	private UserDao userRepo;
+	
+	@Autowired
+	private RequestDao requestRepo;
+	
 	private boolean loggedIn = true;
-	private int employeeId;
+	private int employeeId = -1;
 	@Override
 	public boolean login(String username,String password) throws NoSuchEmployeeException {
+		User user = userRepo.findByUsernameAndPassword(username, password).orElseThrow(()-> new NoSuchEmployeeException("Either Username or password Incorrect"));
+		loggedIn = true;
+//		User user2 = new User("saquib123", "saquib1234", UserType.EMPLOYEE);
+//		Employee emp = new Employee("SaquibEmp", "empemail", "95999", null, user2);
+//		employeeRepo.save(emp);
+		System.out.println(user.getId() + "   " + "saquib123");
+		employeeId = employeeRepo.findByUserLoginDetails(user).get().getId();
+		
+		System.out.println(employeeId + "   " + "saquib123");
+
+		return true;
+	}
+
+	@Override
+	public NeedyPeople addNeedyPerson(NeedyPeople person) throws  DuplicateNeedyPersonException,UserNotLoggedInException, InvalidNeedyPersonObjectException {
 		// TODO Auto-generated method stub
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Project");
-		EntityManager em = emf.createEntityManager();
-		
-		em.getTransaction().begin();
-		Query q = em.createQuery("select u from User u where u.username = :userName");
-		q.setParameter("userName", username);
-		System.out.println("saquib");
-		User user = (User) q.getSingleResult();
-		//q = em.createQuery("select e from Employee e");
-		//List<Employee> emps = q.getResultList();
-		//emps.forEach(System.out::println);
-		System.out.println(user);
-		if (user == null)
-			throw new NoSuchEmployeeException();
-		
-		if (user.getUserType() == UserType.EMPLOYEE) {
-			if(password.equals(user.getPassword())) {
-				loggedIn = true;
-				q = em.createQuery("select e.employeeId from Employee e where e.user.userId = :id");
-				q.setParameter("id", user.getUserId());
-				employeeId = (int) q.getSingleResult();
-				System.out.println("saquib     " + employeeId);
-				return true;
-				
+		if(loggedIn) {
+			if( userRepo.findByUsername(person.getUserLoginDetails().getUsername()).isEmpty())
+			{	
+				if(person.getUserLoginDetails().getUserType()!= UserType.NEEDYPERSON)
+					throw new InvalidNeedyPersonObjectException("Check the User Type");
+				person.setName(person.getName().toUpperCase());
+				return needyPeopleRepo.save(person);
 			}
+			else 
+				throw new DuplicateNeedyPersonException("Needy person already exist");
 		}
-		else {
-			throw new NoSuchEmployeeException();
-		}
-		
-		return false;
-	}
-
-	@Override
-	public NeedyPeople addNeedyPerson(NeedyPeople person) {
-		// TODO Auto-generated method stub
-		return repo.save(person);
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
 			
+
 	}
 
 	@Override
-	public NeedyPeople removeNeedyPerson(NeedyPeople person) {
-		// TODO Auto-generated method stub
-		repo.delete(person);
-		return person;
+	public NeedyPeople removeNeedyPerson(NeedyPeople person) throws UserNotLoggedInException, NoSuchNeedyPersonException {
+		if (loggedIn) {
+			User user = userRepo.findByUsernameAndPassword(person.getUserLoginDetails().getUsername(), 
+					person.getUserLoginDetails().getPassword()).orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
+			NeedyPeople deleteNeedyPerson = needyPeopleRepo.findByUserLoginDetails(user)
+					.orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
+			needyPeopleRepo.delete(deleteNeedyPerson);
+			return deleteNeedyPerson;
+		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
 		
 	}
 
 	@Override
-	public Optional<NeedyPeople> findNeedyPeopleById(int id) {
-		//
-		return repo.findById(id);
+	public NeedyPeople findNeedyPeopleById(int id) throws UserNotLoggedInException, NoSuchNeedyPersonException {
+		if (loggedIn)
+			return needyPeopleRepo.findById(id).orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
 	}
 
 	@Override
-	public List<NeedyPeople> findNeedyPeopleByName(String name) {
+	public List<NeedyPeople> findNeedyPeopleByName(String name) throws UserNotLoggedInException {
 		// TODO Auto-generated method stub
 		if (loggedIn) {
-			// TODO Auto-generated method stub
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("Project");
-			EntityManager em = emf.createEntityManager();
-			Query query = em.createQuery("Select n from NeedyPeople n where n.needyPersonName like :name");
-			query.setParameter("name", name);
-			List<NeedyPeople> list = query.getResultList();
-//			System.out.println("333333333333");
-//			list.forEach(System.out::println);
-			return list;
+			 return needyPeopleRepo.findByNameContainingIgnoreCaseOrderByNameAsc(name);
 		}
-		return null;
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
 	}
 
 	@Override
-	public List<NeedyPeople> findAllNeedyPeople() {
+	public List<NeedyPeople> findAllNeedyPeople() throws UserNotLoggedInException {
 		// TODO Auto-generated method stub
-		return (List<NeedyPeople>) repo.findAll();
+		
+		if (loggedIn) {
+			return (List<NeedyPeople>) needyPeopleRepo.findAll();
+		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
 	}
 
 	@Override
-	public String helpNeedyPerson(DonationDistribution distribute) {
-		// TODO Auto-generated method stub
-		return repo.helpNeedyPerson(distribute);
+	public DonationDistribution helpNeedyPerson(DonationDistribution distribute) throws UserNotLoggedInException {
+		if (loggedIn) {
+			distribute.setStatus(DonationDistributionStatus.FUND_DISBURSED);
+			
+		return 	donationDistributionRepo.save(distribute);
+		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
 	}
 
 	@Override
-	public boolean logout() {
+	public boolean logOut() {
 		// TODO Auto-generated method stub
-		return repo.logout();
+		loggedIn = false;
+		employeeId = -1;
+		return true;
 	}
+
+	@Override
+	public DonationDistribution approveDonationDistribution(Request request) throws UserNotLoggedInException, DataIntegrityViolationException {
+		// TODO Auto-generated method stub
+		
+		if (loggedIn) {
+			NeedyPeople needyPeople = needyPeopleRepo.findById(request.getNeedyPersonId()).get();
+			DonationItem donationItem = new DonationItem(request.getDonationType(), null);
+			DonationDistribution donationDistribution = new DonationDistribution(needyPeople, donationItem, null, 0,
+					null, null, DonationDistributionStatus.APPROVED);
+			return donationDistributionRepo.save(donationDistribution);
+		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
+	}
+
+	@Override
+	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException {
+		
+		
+		if (loggedIn) {
+			return donationDistributionRepo.findByStatusContaining(DonationDistributionStatus.APPROVED);
+		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
+	}
+
+	@Override
+	public List<Request> checkPendingRequests() throws UserNotLoggedInException  {
+		if (loggedIn) {
+			return requestRepo.findByStatusContaining(RequestStatus.APPROVED);		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
+	}
+	
+	
 
 }

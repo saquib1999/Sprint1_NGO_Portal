@@ -4,9 +4,9 @@
      <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
        
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE" />
-            <property name="javax.persistence.jdbc.user" value="system" />
-            <property name="javax.persistence.jdbc.password" value="saquib" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1522:XE" />
+            <property name="javax.persistence.jdbc.user" value="parth" />
+            <property name="javax.persistence.jdbc.password" value="parth123" />
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.driver.OracleDriver" />
             <property name="hibernate.hbm2ddl.auto" value="update"/>    <!-- for auto create/update tables -->
         <property name="hibernate.show_sql" value="true"/>

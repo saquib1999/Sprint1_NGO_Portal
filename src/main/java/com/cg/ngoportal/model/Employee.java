@@ -19,7 +19,7 @@ public class Employee {
 	@Id //@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@GeneratedValue(generator = "NEMPID", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "NEMPID", sequenceName = "NEMP_ID",allocationSize=1,initialValue = 100)
-	private int employeeId;
+	private long employeeId;
 	private String employeeName;
 	private String email;
 	private String phone;
@@ -46,7 +46,7 @@ public class Employee {
 		this.address = address;
 		this.user = user;
 	}
-	public int getEmployeeId() {
+	public long getEmployeeId() {
 		return employeeId;
 	}
 	

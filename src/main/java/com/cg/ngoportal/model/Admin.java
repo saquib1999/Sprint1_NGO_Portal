@@ -30,7 +30,7 @@ public class Admin {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public int getAdminId() {
+	public long getAdminId() {
 		return adminId;
 	}
 	public void setAdminId(int adminId) {

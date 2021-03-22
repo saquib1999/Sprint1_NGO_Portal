@@ -7,6 +7,7 @@ import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.Employee;
 
 public interface AdminDao {
+	public int login(String username, String password) throws SQLException;
 	public int createEmployee(Employee employee)throws SQLException;
 	public Employee updateEmployee(Employee employee)throws SQLException;
 	public int deleteEmployee(int employeeId)throws SQLException;

@@ -15,16 +15,16 @@ import com.cg.ngoportal.service.EmployeeServiceImpl;
 @RequestMapping("/employee")
 public class EmployeeController {
 	
-	@Autowired
-	private EmployeeServiceImpl employeeServiceImpl;
-	
+	//@Autowired
+	//private EmployeeServiceImpl employeeServiceImpl;
+	/*
 	@PostMapping("/login")
 	public ResponseEntity<boolean> login(@RequestBody String username, @RequestBody String password) throws NoSuchEmployeeException {
 		
 		return new ResponseEntity<boolean>( employeeServiceImpl.login(username, password),HttpStatus.OK);
 	}
-	
-	@PostMapping("/createNeedyPeople")
+	*/
+	//@PostMapping("/createNeedyPeople")
 	
 	
 

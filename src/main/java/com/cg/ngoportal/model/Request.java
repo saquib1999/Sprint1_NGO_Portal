@@ -82,9 +82,17 @@ public class Request {
 		this.needyPersonId = needyPersonId;
 	}
 
+	
+
 	public RequestStatus getStatus() {
 		return status;
 	}
+
+
+	public void setStatus(RequestStatus status) {
+		this.status = status;
+	}
+
 
 	@Override
 	public String toString() {

@@ -1,5 +1,5 @@
 package com.cg.ngoportal.model;
 
 public enum RequestStatus {
-	PENDING, APPROVED, REJECTED;
+	PENDING, EMPLOYEE_APPROVED, REJECTED;
 }

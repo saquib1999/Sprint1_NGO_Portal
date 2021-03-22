@@ -56,6 +56,12 @@ public class DonationDistribution {
 		this.approvalOrRejectedDate = approvalOrRejectedDate;
 		this.status = status;
 	}
+	public DonationDistribution(DonationItem item) {
+		// TODO Auto-generated constructor stub
+		this.item = item;
+	}
+
+
 	public int getId() {
 		return id;
 	}

@@ -14,6 +14,6 @@ import com.cg.ngoportal.model.RequestStatus;
 @Repository
 public interface DonationDistributionDao extends JpaRepository<DonationDistribution, Integer> {
 
-	@Query("Select d from DonationDistribution d where d.status= ?1")
-	List<DonationDistribution> findByStatusContaining(DonationDistributionStatus status);
+//	@Query("Select d from DonationDistribution d where d.status= ?1")
+	List<DonationDistribution> findByStatus(DonationDistributionStatus status);
 }

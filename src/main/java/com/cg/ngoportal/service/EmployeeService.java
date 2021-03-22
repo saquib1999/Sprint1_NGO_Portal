@@ -26,7 +26,7 @@ public interface EmployeeService {
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws UserNotLoggedInException;
 	public List<NeedyPeople> findAllNeedyPeople() throws UserNotLoggedInException;
 	public DonationDistribution helpNeedyPerson(DonationDistribution distribute) throws UserNotLoggedInException;
-	public DonationDistribution approveDonationDistribution(Request request) throws UserNotLoggedInException;
+	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException;
 	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException;
 	public List<Request> checkPendingRequests() throws UserNotLoggedInException;
 	public boolean logOut();

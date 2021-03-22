@@ -84,8 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public NeedyPeople removeNeedyPerson(NeedyPeople person) throws UserNotLoggedInException, NoSuchNeedyPersonException {
 		if (loggedIn) {
-			User user = userRepo.findByUsernameAndPassword(person.getUserLoginDetails().getUsername(), 
-					person.getUserLoginDetails().getPassword()).orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
+			User user = userRepo.findByUsername(person.getUserLoginDetails().getUsername()).orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
 			NeedyPeople deleteNeedyPerson = needyPeopleRepo.findByUserLoginDetails(user)
 					.orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
 			needyPeopleRepo.delete(deleteNeedyPerson);
@@ -145,26 +144,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public DonationDistribution approveDonationDistribution(Request request) throws UserNotLoggedInException, DataIntegrityViolationException {
+	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException, DataIntegrityViolationException {
 		// TODO Auto-generated method stub
 		
 		if (loggedIn) {
-			NeedyPeople needyPeople = needyPeopleRepo.findById(request.getNeedyPersonId()).get();
-			DonationItem donationItem = new DonationItem(request.getDonationType(), null);
-			DonationDistribution donationDistribution = new DonationDistribution(needyPeople, donationItem, null, 0,
-					null, null, DonationDistributionStatus.APPROVED);
-			return donationDistributionRepo.save(donationDistribution);
+			NeedyPeople needyPerson = needyPeopleRepo.findById(request.getNeedyPersonId()).get();
+			DonationItem donationItem = new DonationItem(request.getDonationType(), request.getReason());
+			distribution.setDistributedBy(employeeRepo.findById(employeeId).orElseThrow(()->new UserNotLoggedInException("Employee Not Logged In")));
+			distribution.setStatus(DonationDistributionStatus.PENDING);
+			distribution.setPerson(needyPerson);
+			distribution.getItem().setItem(request.getDonationType());
+			distribution.getItem().setDescription(request.getReason());
+			request.setStatus(RequestStatus.EMPLOYEE_APPROVED);
+			requestRepo.save(request);
+			return donationDistributionRepo.save(distribution);
 		}
 		else
 			throw new UserNotLoggedInException("Employee Not Logged In");
 	}
-
+		
 	@Override
 	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException {
 		
 		
 		if (loggedIn) {
-			return donationDistributionRepo.findByStatusContaining(DonationDistributionStatus.APPROVED);
+			return donationDistributionRepo.findByStatus(DonationDistributionStatus.APPROVED);
 		}
 		else
 			throw new UserNotLoggedInException("Employee Not Logged In");
@@ -173,7 +177,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Request> checkPendingRequests() throws UserNotLoggedInException  {
 		if (loggedIn) {
-			return requestRepo.findByStatusContaining(RequestStatus.APPROVED);		}
+			return requestRepo.findByStatusContaining(RequestStatus.PENDING);		}
 		else
 			throw new UserNotLoggedInException("Employee Not Logged In");
 	}

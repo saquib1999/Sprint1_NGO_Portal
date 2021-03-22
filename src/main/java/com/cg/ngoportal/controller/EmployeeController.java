@@ -22,6 +22,7 @@ import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.DonationDistribution;
+import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.service.EmployeeService;
@@ -89,7 +90,7 @@ public class EmployeeController {
 	
 	@PostMapping("/employee/approve")
 	public ResponseEntity<DonationDistribution> approveRequest(@RequestBody Request request ) throws UserNotLoggedInException{
-		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistribution(request),HttpStatus.ACCEPTED);
+		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistributionEmployeeLevel(request, new DonationDistribution(new DonationItem())),HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/employee/pending-request")

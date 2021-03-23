@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 //import org.springframework.mail.SimpleMailMessage;
 //import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -28,8 +30,8 @@ public class DonorServiceImpl implements DonorService{
 	DonationDao donationRepo;
 	@Autowired
 	UserDao userRepo;
-	//@Autowired
-	//JavaMailSender mailSender;
+	@Autowired
+	JavaMailSender mailSender;
 	private boolean loggedIn = true;
 	private int donorId=1000;
 	
@@ -61,7 +63,6 @@ public class DonorServiceImpl implements DonorService{
 		if(loggedIn==true) {
 			donation.setDonorId(donorId);
 			donation.setDateOfDonation(new Date());
-			
 			return donationRepo.save(donation);
 		}
 		else {
@@ -72,43 +73,48 @@ public class DonorServiceImpl implements DonorService{
 	@Override
 	public String sendThankyouMailToDonator(Donor donor) {
 		// TODO Auto-generated method stub
-		/*SimpleMailMessage message=new SimpleMailMessage();
-		message.setFrom("umang@gmail.com");
+		SimpleMailMessage message=new SimpleMailMessage();
+		message.setFrom("aladdin.aladdin0708@gmail.com");
 		message.setTo(donor.getEmail());
 		message.setText("Thank You for Donation");
 		message.setSubject("Thank You Mail");
-		mailSender.send(message);*/
-		return "Thank You "+ donor.getName();
+		mailSender.send(message);
+		return "Thank You mail sent successfully "+ donor.getName();
 	}
 
 	@Override
 	public String forgotPassword(String username) throws NoSuchDonorException {
 		// TODO Auto-generated method stub
 		User user = userRepo.findByUsername(username).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
-		return user.getPassword();
+		Donor donor=donorRepo.findByUserLoginDetails(user).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
+		SimpleMailMessage message=new SimpleMailMessage();
+		message.setFrom("aladdin.aladdin0708@gmail.com");
+		message.setTo(donor.getEmail());
+		message.setText(donor.getUserLoginDetails().getPassword());
+		message.setSubject("Forgot Password ");
+		mailSender.send(message);
+		return "Password sent on email";
 	}
 
 	@Override
 	public String resetPassword(String username,String oldPassword,String newPassword) throws NoSuchDonorException {
 		// TODO Auto-generated method stub
 		User user = userRepo.findByUsernameAndPassword(username, oldPassword).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
-		//String newpassword=user.getUsername();
-		//newpassword+="1234";
 		user.setPassword(newPassword);
 		userRepo.save(user);
-		return newPassword;	
+		return "Password reset successfully";	
 	}
 
 	@Override
 	public String emailPasswordToDonor(String email) throws NoSuchDonorException {
-		/*SimpleMailMessage message=new SimpleMailMessage();
-		message.setFrom("umang@gmail.com");
+		Donor donor=donorRepo.findByEmail(email).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
+		SimpleMailMessage message=new SimpleMailMessage();
+		message.setFrom("aladdin.aladdin0708@gmail.com");
 		message.setTo(donor.getEmail());
 		message.setText(donor.getUserLoginDetails().getPassword());
 		message.setSubject("Forgot Password ");
-		mailSender.send(message);*/
-		Donor donor=donorRepo.findByEmail(email).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
-		return donor.getUserLoginDetails().getPassword();
+		mailSender.send(message);		
+		return "Password send successfully";
 	}
 
 	@Override

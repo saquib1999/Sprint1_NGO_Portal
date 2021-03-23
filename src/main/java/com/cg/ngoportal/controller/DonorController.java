@@ -15,7 +15,6 @@ import com.cg.ngoportal.service.DonorServiceImpl;
 public class DonorController {
 	@Autowired
 	DonorServiceImpl donorService;
-	
 	@PostMapping("/donor/register")
 	public ResponseEntity<Donor> registerDonor(@RequestBody Donor donor) {		
 		
@@ -33,6 +32,7 @@ public class DonorController {
 		return new ResponseEntity<Donation>(donorService.donateToNGO(donation), HttpStatus.ACCEPTED);
 	}
 	@GetMapping("donor/thankyou-mail")
+	//@EventListener(ApplicationReadyEvent.class)
 	public ResponseEntity<String> sendThankyouMailToDonator(@RequestBody Donor donor) {	
 		
 		return new ResponseEntity<String>(donorService.sendThankyouMailToDonator(donor), HttpStatus.OK);

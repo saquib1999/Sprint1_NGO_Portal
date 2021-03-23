@@ -23,4 +23,5 @@ public class Sprint1NgoPortalApplication {
 		return new Docket(DocumentationType.SWAGGER_2).select().paths(PathSelectors.ant("/api/*"))
 				.apis(RequestHandlerSelectors.basePackage("com.cg")).build();
 	}*/
+	
 }

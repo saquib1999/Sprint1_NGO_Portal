@@ -98,15 +98,16 @@ class DonorServiceImplTest {
 		
 	}
 	@Test
-	void forgotPasswordTest() {
+	void forgotPasswordTest()throws NoSuchDonorException {
 		when(userRepo.findByUsername("shiv")).thenReturn(Optional.of(donor.getUserLoginDetails()));
-		Assertions.assertEquals("shiv", donorService.forgotPassword("shiv"));
+		when(donorRepo.findByUserLoginDetails(donor.getUserLoginDetails())).thenReturn(Optional.of(donor));
+		Assertions.assertEquals("Password sent on email", donorService.forgotPassword("shiv"));
 		
 	}
 	@Test
-	void resetPasswordTest() {
+	void resetPasswordTest()throws NoSuchDonorException {
 		when(userRepo.findByUsernameAndPassword("shiv","shiv")).thenReturn(Optional.of(donor.getUserLoginDetails()));
-		Assertions.assertEquals("SHIV", donorService.resetPassword("shiv","shiv","SHIV"));
+		Assertions.assertEquals("Password reset successfully", donorService.resetPassword("shiv","shiv","SHIV"));
 	}
 	
 

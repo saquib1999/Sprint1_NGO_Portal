@@ -2,6 +2,7 @@ package com.cg.ngoportal.controller;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,6 @@ import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
-import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.service.NeedyPeopleService;
 
 @RestController

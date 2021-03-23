@@ -15,11 +15,12 @@ import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.User;
+import com.cg.ngoportal.model.UserType;
 
 @Service
 public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 
-	private boolean loggedIn = true;
+	private boolean loggedIn = false;
 	private int needyPersonId = -1;
 
 	@Autowired
@@ -31,74 +32,86 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 	@Autowired
 	UserDao userRepo;
 
-	//Register Needy Person
+	// Register Needy Person
 	@Override
 	public NeedyPeople register(NeedyPeople person) throws DuplicateNeedyPersonException {
 		Optional<User> user = userRepo.findByUsername(person.getUserLoginDetails().getUsername());
-		if(user.isEmpty()) {
+		if (user.isEmpty()) {
+			person.getUserLoginDetails().setUserType(UserType.NEEDYPERSON);
 			needyPeopleRepo.save(person);
-		}
-		else {
+			return person;
+		} else
 			throw new DuplicateNeedyPersonException("Username is already taken.");
-		}
-		return person;
-		
+
 	}
-	
-	//Login Needy Person
+
+	// Login Needy Person
 	@Override
-	public String loginNeedyPerson(String username, String password) throws NoSuchNeedyPersonException{
+	public String loginNeedyPerson(String username, String password) throws NoSuchNeedyPersonException {
 		User user = userRepo.findByUsernameAndPassword(username, password)
-				.orElseThrow(()->new NoSuchNeedyPersonException("Username or Password is incorrect."));
-		
-		loggedIn = true; 
+				.orElseThrow(() -> new NoSuchNeedyPersonException("Username or Password is incorrect."));
+
+		loggedIn = true;
 		needyPersonId = needyPeopleRepo.findByUserLoginDetails(user).get().getId();
-		return /* "Logged In as " */ user.getUsername();
-		
+		return  "Logged In as " +user.getUsername();
+
 	}
 
-	//Needy Person requests for help 
+	// Needy Person requests for help
 	@Override
-	public Request requestForHelp(Request request) throws UserNotLoggedInException{
-		if(loggedIn) 
+	public Request requestForHelp(Request request) throws UserNotLoggedInException {
+		if (loggedIn) {
+			request.setNeedyPersonId(needyPersonId);
 			return requestRepo.save(request);
-		else
+		} else
 			throw new UserNotLoggedInException("Please Log in.");
-		
+
 	}
 
-	//Check the request status
+	// Check the request status
 	@Override
 	public List<Request> requestStatusCheck() throws UserNotLoggedInException {
-		if(loggedIn) {
+		if (loggedIn) {
 			List<Request> request = requestRepo.findByNeedyPersonId(needyPersonId);
-			return request; 
-		}
-		else 
+			return request;
+		} else
 			throw new UserNotLoggedInException("Please Log in.");
-	}
-		
-	//Check the request status  (For testing)
-	@Override
-	public List<Request> requestStatusCheck(int needyPersonId) throws UserNotLoggedInException{
-		if(loggedIn) {
-			List<Request> request = requestRepo.findByNeedyPersonId(needyPersonId);
-			return request; 
-		}
-		else 
-			throw new UserNotLoggedInException("Please Log in.");
-		
 	}
 
-	//Logout Needy Person
+	// Check the request status (For testing)
 	@Override
-	public String logOut() 
-	{
+	public List<Request> requestStatusCheck(int needyPersonId) throws UserNotLoggedInException {
+		if (loggedIn) {
+			List<Request> request = requestRepo.findByNeedyPersonId(needyPersonId);
+			return request;
+		} else
+			throw new UserNotLoggedInException("Please Log in.");
+
+	}
+
+	// Modify Needy Person details
+	@Override
+	public NeedyPeople modifyNeedyPerson(NeedyPeople needyPerson)
+			throws NoSuchNeedyPersonException, UserNotLoggedInException {
+		if (loggedIn) {
+			NeedyPeople persontoUpdate = needyPeopleRepo.findById(needyPersonId).get();
+			persontoUpdate.setName(needyPerson.getName());
+			persontoUpdate.setPhone(needyPerson.getPhone());
+			persontoUpdate.setFamilyIncome(needyPerson.getFamilyIncome());
+			persontoUpdate.setAddress(needyPerson.getAddress());
+			return needyPeopleRepo.save(persontoUpdate);
+		} else
+			throw new UserNotLoggedInException("Please Log in.");
+
+	}
+
+	// Logout Needy Person
+	@Override
+	public String logOut() {
 		loggedIn = false;
 		needyPersonId = -1;
 		return "Logged Out!";
-		
+
 	}
 
-	
 }

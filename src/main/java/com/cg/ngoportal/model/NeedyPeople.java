@@ -40,6 +40,14 @@ public class NeedyPeople {
 		this.address = address;
 	}
 
+	public NeedyPeople(String name, String phone, double familyIncome, Address address) {
+		super();
+		this.name = name;
+		this.phone = phone;
+		this.familyIncome = familyIncome;
+		this.address = address;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -50,6 +58,10 @@ public class NeedyPeople {
 
 	public int getId() {
 		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public User getUserLoginDetails() {

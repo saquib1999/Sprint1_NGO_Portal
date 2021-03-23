@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "NUsers")
 public class User {
@@ -18,6 +20,8 @@ public class User {
 	
 	@Column(unique=true)
 	private String username;
+	
+	@JsonIgnore
 	private String password;
 	private UserType userType;
 	
@@ -62,10 +66,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", userType=" + userType
+		return "User [id=" + id + ", username=" + username + ", userType=" + userType
 				+ "]";
 	}
-	
 	
 
 }

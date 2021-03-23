@@ -23,7 +23,9 @@ import com.cg.ngoportal.dao.AdminDao;
 import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
 import com.cg.ngoportal.exception.DuplicateEmployeeException;
+import com.cg.ngoportal.exception.IncorrectLoginDetailsException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Address;
 import com.cg.ngoportal.model.Admin;
 import com.cg.ngoportal.model.DonationDistribution;
@@ -106,65 +108,66 @@ public class AdminServiceImplTest {
 	void tearDown() throws Exception {
 	}
 	@Test
-	public void loginTest() {
+	public void Testlogin() throws IncorrectLoginDetailsException {
 		when(adminDaoRepo.findByUsernameAndPassword(ad.getUsername(), ad.getPassword())).thenReturn(Optional.of(ad));
-		Assertions.assertEquals(true, adminService.login(ad));
+		Assertions.assertEquals("Logged in Successfully as " + ad.getUsername(), adminService.login(ad));
 	}
 	//working
 	@Test
-	public void addEmployeeTest() throws DuplicateEmployeeException{
+	public void TestaddEmployee() throws DuplicateEmployeeException, UserNotLoggedInException{
 		when(employeeDaoRepo.save(emp1)).thenReturn(emp1);
 		Assertions.assertEquals(emp1, adminService.addEmployee(emp1));
 	}
 	//working
 	@Test
-	public void modifyEmployeeTest() throws NoSuchEmployeeException{
+	public void TestmodifyEmployee() throws NoSuchEmployeeException, UserNotLoggedInException{
 		when(employeeDaoRepo.findById(emp2.getId())).thenReturn(Optional.of(emp2));
 		when(employeeDaoRepo.save(emp2)).thenReturn(emp4);
 		Assertions.assertEquals(emp4, adminService.modifyEmployee(emp2.getId(), emp4));
 	}
 	//working
 	@Test
-	public void removeEmployeeTest() throws NoSuchEmployeeException {
+	public void TestremoveEmployee() throws NoSuchEmployeeException, UserNotLoggedInException {
 		when(employeeDaoRepo.findByUsername(emp1.getUserLoginDetails().getUsername())).thenReturn(Optional.of(emp1));
 		Assertions.assertEquals(true, adminService.removeEmployee(emp1.getUserLoginDetails().getUsername()));
 		
 	}
 	//working
 	@Test
-	public void findEmployeeByIdTest() throws NoSuchEmployeeException{
+	public void TestfindEmployeeById() throws NoSuchEmployeeException, UserNotLoggedInException{
 		when(employeeDaoRepo.findByEmployeeId(emp1.getId())).thenReturn(Optional.of(emp1));
 		Assertions.assertEquals(emp1, adminService.findEmployeeById(emp1.getId()));
 	}
 	
 	//working
 	@Test
-	public void findEmployeeByNameTest() throws NoSuchEmployeeException{
+	public void TestfindEmployeeByName() throws NoSuchEmployeeException, UserNotLoggedInException{
 		when(employeeDaoRepo.findByName(emp1.getName())).thenReturn(elistname);
 		Assertions.assertEquals(elistname, adminService.findEmployeeByName(emp1.getName()));
 	}
 	//working
 	@Test
-	public void findAllEmployeesTest() throws NoSuchEmployeeException{
+	public void TestfindAllEmployees() throws NoSuchEmployeeException, UserNotLoggedInException{
 		when(employeeDaoRepo.findAllActiveEmployee()).thenReturn(elist);
 		Assertions.assertEquals(3,adminService.findAllEmployee().size());
 	}
-	//working
+	
 	@Test
-	public void findAllPendingDonations() {
-		when(donationdistributionDaoRepo.findAllPendingDonations()).thenReturn(dlist);
+	public void TestfindAllPendingDonations() throws UserNotLoggedInException {
+		when(donationdistributionDaoRepo.findByStatus(DonationDistributionStatus.PENDING)).thenReturn(dlist);
 		Assertions.assertEquals(3, adminService.findAllPendingDonations().size());
 	}
 	
 	@Test
-	public void approveDonationTest() {
+	public void TestapproveDonation() throws UserNotLoggedInException {
 		when(donationdistributionDaoRepo.findById(dd1.getId())).thenReturn(Optional.of(dd1));
 		when(donationdistributionDaoRepo.save(dd1)).thenReturn(dd4);
 		Assertions.assertEquals(dd4, adminService.approveDonation(dd1));
 	}
+	
 	@Test
-	public void logoutTest() {
-		Assertions.assertEquals(true, adminService.logout());
+	public void Testlogout() {
+		Assertions.assertEquals("Logged Out Successfully", adminService.logout());
 	}
 	
 	

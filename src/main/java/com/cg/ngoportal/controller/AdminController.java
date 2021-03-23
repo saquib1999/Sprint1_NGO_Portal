@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.ngoportal.exception.DuplicateEmployeeException;
+import com.cg.ngoportal.exception.IncorrectLoginDetailsException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Admin;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.Employee;
@@ -28,30 +30,28 @@ public class AdminController {
 		//login
 		//working
 		@GetMapping("/login")
-		public ResponseEntity<Admin> login(@RequestBody Admin admin){
-			
-			adminService.login(admin);
-			return new ResponseEntity<Admin>(admin, HttpStatus.ACCEPTED);
+		public ResponseEntity<String> login(@RequestBody Admin admin) throws IncorrectLoginDetailsException{
+			return new ResponseEntity<String>(adminService.login(admin), HttpStatus.ACCEPTED);
 		}
 		//createEmployee
 		//working
 		@PostMapping("/add-employee")
-		public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) throws DuplicateEmployeeException{
+		public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) throws DuplicateEmployeeException, UserNotLoggedInException{
 			adminService.addEmployee(employee);
 			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
 		}
 		
 		//working
 		//modifyEmployee
-		@PostMapping("/modify-employee")
-		public ResponseEntity<Employee> modifyEmployee(@RequestBody Employee employee) throws NoSuchEmployeeException{
+		@PutMapping("/modify-employee")
+		public ResponseEntity<Employee> modifyEmployee(@RequestBody Employee employee) throws NoSuchEmployeeException, UserNotLoggedInException{
 			adminService.modifyEmployee(employee.getId(), employee);
 			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 		}
 		
 		//deleteEmployee 
-		@PostMapping("/delete-employee/{username}")
-		public String deleteEmployee(@PathVariable String username) throws NoSuchEmployeeException {
+		@DeleteMapping("/delete-employee/{username}")
+		public String deleteEmployee(@PathVariable String username) throws NoSuchEmployeeException, UserNotLoggedInException {
 			adminService.removeEmployee(username);
 			return "Deleted";
 		}
@@ -59,7 +59,7 @@ public class AdminController {
 		//working
 		//find EmployeeByID
 		@GetMapping("/find-employee-by-id/{id}")
-		public ResponseEntity<Employee> findEmployeeById(@PathVariable int id) throws NoSuchEmployeeException{
+		public ResponseEntity<Employee> findEmployeeById(@PathVariable int id) throws NoSuchEmployeeException, UserNotLoggedInException{
 			Employee employee = adminService.findEmployeeById(id);
 			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 		}
@@ -67,36 +67,35 @@ public class AdminController {
 		//working
 		//find EmployeeByName
 		@GetMapping("/find-employee-by-name/{name}")
-		public ResponseEntity<List<Employee>> findEmployeeByName(@PathVariable String name) throws NoSuchEmployeeException{
+		public ResponseEntity<List<Employee>> findEmployeeByName(@PathVariable String name) throws NoSuchEmployeeException, UserNotLoggedInException{
 			List<Employee> elist = adminService.findEmployeeByName(name);
 			return new ResponseEntity<List<Employee>>(elist, HttpStatus.OK);
 		}
 		//working
 		//find AllEmployees
 		@GetMapping("/find-all-employees")
-		public ResponseEntity<List<Employee>> findAllEmployee() throws NoSuchEmployeeException{
+		public ResponseEntity<List<Employee>> findAllEmployee() throws NoSuchEmployeeException, UserNotLoggedInException{
 			List<Employee> elist = adminService.findAllEmployee();
 			return new ResponseEntity<List<Employee>>(elist, HttpStatus.OK);
 		}
 		
 		@GetMapping("/find-all-donations")
-		public ResponseEntity<List<DonationDistribution>> findAllDonations(){
+		public ResponseEntity<List<DonationDistribution>> findAllDonations() throws UserNotLoggedInException{
 			List<DonationDistribution> dlist = adminService.findAllPendingDonations();
 			return new ResponseEntity<List<DonationDistribution>>(dlist, HttpStatus.OK);
 		}
 		
 		//approveDonations
 		@PutMapping("/approve-donation")
-		public ResponseEntity<DonationDistribution> approveDonation(@RequestBody DonationDistribution dd){
+		public ResponseEntity<DonationDistribution> approveDonation(@RequestBody DonationDistribution dd) throws UserNotLoggedInException{
 			DonationDistribution donation = adminService.approveDonation(dd);
 			return new ResponseEntity<DonationDistribution>(donation, HttpStatus.ACCEPTED);
 		}
 		//working
 		//logout
 		@GetMapping("/logout")
-		public ResponseEntity<?> logout(){
-			adminService.logout();
-			return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		public ResponseEntity<String> logout(){
+			return new ResponseEntity<String>(adminService.logout(), HttpStatus.ACCEPTED);
 		}
 		
 }

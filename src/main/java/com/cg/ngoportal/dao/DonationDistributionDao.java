@@ -10,8 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import com.cg.ngoportal.model.Admin;
 import com.cg.ngoportal.model.DonationDistribution;
+import com.cg.ngoportal.model.DonationDistributionStatus;
+import com.cg.ngoportal.model.DonationType;
 @Repository
 public interface DonationDistributionDao extends JpaRepository<DonationDistribution, Integer> {
-	@Query("SELECT d FROM DonationDistribution d WHERE d.status = PENDING")
-	public List<DonationDistribution> findAllPendingDonations();
+	
+	//@Query("SELECT d FROM DonationDistribution d WHERE d.status = 'PENDING'")
+	public List<DonationDistribution> findByStatus(DonationDistributionStatus status);
+	
 }

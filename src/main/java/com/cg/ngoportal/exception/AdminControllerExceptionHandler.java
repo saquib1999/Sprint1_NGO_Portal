@@ -28,4 +28,18 @@ public class AdminControllerExceptionHandler {
 		ErrorDetail errorDetail = new ErrorDetail(new Date(), de.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errorDetail, HttpStatus.NOT_FOUND);
 	}
+	
+	@ResponseBody
+	@ExceptionHandler(UserNotLoggedInException.class)
+	ResponseEntity<?> exceptionHandler(UserNotLoggedInException ue, WebRequest request){
+		ErrorDetail errorDetail = new ErrorDetail(new Date(), ue.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetail, HttpStatus.NOT_FOUND);
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(IncorrectLoginDetailsException.class)
+	ResponseEntity<?> exceptionHandler(IncorrectLoginDetailsException ie, WebRequest request){
+		ErrorDetail errorDetail = new ErrorDetail(new Date(), ie.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(errorDetail, HttpStatus.NOT_FOUND);
+	}
 }

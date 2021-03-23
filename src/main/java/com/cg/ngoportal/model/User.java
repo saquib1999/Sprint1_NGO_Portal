@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "NUsers")
 public class User {
@@ -18,6 +20,7 @@ public class User {
 	
 	@Column(unique=true)
 	private String username;
+	@JsonIgnore
 	private String password;
 	private UserType userType;
 	

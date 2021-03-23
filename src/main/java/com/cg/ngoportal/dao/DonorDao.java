@@ -15,5 +15,6 @@ import com.cg.ngoportal.model.User;
 public interface DonorDao extends JpaRepository<Donor, Integer> {
 	Optional<Donor> findByEmail(String email);
 	Optional<Donor> findByUserLoginDetails(User user);
+	Optional<Donor> findById(int donorId);
 	
 }

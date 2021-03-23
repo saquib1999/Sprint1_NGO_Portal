@@ -1,6 +1,7 @@
 package com.cg.ngoportal.service.test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import com.cg.ngoportal.dao.DonationDao;
 import com.cg.ngoportal.dao.DonationItemDao;
@@ -25,6 +28,7 @@ import com.cg.ngoportal.dao.DonorDao;
 import com.cg.ngoportal.dao.UserDao;
 import com.cg.ngoportal.exception.DuplicateDonorException;
 import com.cg.ngoportal.exception.NoSuchDonorException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Address;
 import com.cg.ngoportal.model.Donation;
 import com.cg.ngoportal.model.DonationItem;
@@ -44,7 +48,8 @@ class DonorServiceImplTest {
 	UserDao userRepo;
 	@Mock
 	DonationItemDao donationItemRepo;
-	
+	@Mock
+	JavaMailSender mailSender;
 	@InjectMocks
 	DonorServiceImpl donorService;
 	
@@ -77,38 +82,60 @@ class DonorServiceImplTest {
 	void tearDown() throws Exception {
 	}
 	@Test
-	void registerDonorTest() throws DuplicateDonorException {
+	void testRegisterDonor() throws DuplicateDonorException {
 		when(donorRepo.save(donor)).thenReturn(donor);
 		Assertions.assertEquals(donor, donorService.registerDonor(donor));
 		
 	}
 	
 	@Test
-	void loginTest() throws NoSuchDonorException{
+	void testLogin() throws NoSuchDonorException{
 		when(userRepo.findByUsernameAndPassword("shiv","shiv")).thenReturn(Optional.of(donor.getUserLoginDetails()));
 		when(donorRepo.findByUserLoginDetails(donor.getUserLoginDetails())).thenReturn(Optional.of(donor));
 		Assertions.assertEquals(donor.getId(), donorService.login("shiv","shiv"));
 	}
 	@Test
-	void donateToNGOTest() {
+	void testDonateToNGO()throws UserNotLoggedInException {
 		DonationItem i=new DonationItem(DonationType.MONEY,"10000$");
 		Donation don=new Donation(1000,i,10000,null);
+		when(donorRepo.findById(1000)).thenReturn(Optional.of(donor));
 		when(donationRepo.save(don)).thenReturn(don);
-		Assertions.assertEquals(don, donorService.donateToNGO(don));
+		SimpleMailMessage message=new SimpleMailMessage();
+		donorService.donateToNGO(don,message);
+		verify(mailSender,times(1)).send(message);
+		Assertions.assertEquals(don, donorService.donateToNGO(don,message));
 		
 	}
 	@Test
-	void forgotPasswordTest()throws NoSuchDonorException {
+	void testForgotPassword()throws NoSuchDonorException {
 		when(userRepo.findByUsername("shiv")).thenReturn(Optional.of(donor.getUserLoginDetails()));
 		when(donorRepo.findByUserLoginDetails(donor.getUserLoginDetails())).thenReturn(Optional.of(donor));
-		Assertions.assertEquals("Password sent on email", donorService.forgotPassword("shiv"));
-		
+		SimpleMailMessage message=new SimpleMailMessage();
+		donorService.forgotPassword("shiv", message);
+		verify(mailSender,times(1)).send(message);
 	}
 	@Test
-	void resetPasswordTest()throws NoSuchDonorException {
+	void testResetPassword()throws NoSuchDonorException {
 		when(userRepo.findByUsernameAndPassword("shiv","shiv")).thenReturn(Optional.of(donor.getUserLoginDetails()));
 		Assertions.assertEquals("Password reset successfully", donorService.resetPassword("shiv","shiv","SHIV"));
 	}
-	
+	@Test
+	void testLogOut() {
+		Assertions.assertEquals("Logged Out!", donorService.logOut());
+	}
+	@Test
+	void testSendThankyouMailToDonator()throws UserNotLoggedInException{
+		when(donorRepo.findById(1000)).thenReturn(Optional.of(donor));
+		SimpleMailMessage message=new SimpleMailMessage();
+		donorService.sendThankyouMailToDonator(message);
+		verify(mailSender,times(1)).send(message);
+	}
+	@Test
+	void testEmailPasswordToDonor()throws UserNotLoggedInException{
+		when(donorRepo.findById(1000)).thenReturn(Optional.of(donor));
+		SimpleMailMessage message=new SimpleMailMessage();
+		donorService.emailPasswordToDonor(message);
+		verify(mailSender,times(1)).send(message);
+	}
 
 }

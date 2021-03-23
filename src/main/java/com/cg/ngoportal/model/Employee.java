@@ -29,13 +29,15 @@ public class Employee {
 	@OneToOne(cascade = CascadeType.ALL)
 	private User userLoginDetails;
 	
+	private int Active;
+	
 	
 	
 	public Employee() {
 		// TODO Auto-generated constructor stub
 		}
 
-	public Employee( String name, String email, String phone, Address address, User userLoginDetails) {
+	public Employee( String name, String email, String phone, Address address, User userLoginDetails, int Active) {
 		super();
 		
 		this.name = name;
@@ -43,6 +45,7 @@ public class Employee {
 		this.phone = phone;
 		this.address = address;
 		this.userLoginDetails = userLoginDetails;
+		this.Active = Active;
 	}
 
 	public int getId() {
@@ -90,6 +93,13 @@ public class Employee {
 		this.userLoginDetails = userLoginDetails;
 	}
 
+	public void setActive(int Active) {
+		this.Active = Active;
+	}
+	public int getActive() {
+		return this.Active;
+	}
+	
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address="

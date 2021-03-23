@@ -1,10 +1,12 @@
 package com.cg.ngoportal.service;
 
+import org.springframework.stereotype.Service;
+
 import com.cg.ngoportal.exception.DuplicateDonorException;
 import com.cg.ngoportal.exception.NoSuchDonorException;
 import com.cg.ngoportal.model.Donation;
 import com.cg.ngoportal.model.Donor;
-
+@Service
 public interface DonorService {
 	public boolean registerDonor(Donor donor) throws DuplicateDonorException;
 	public boolean login(Donor donor) throws NoSuchDonorException;

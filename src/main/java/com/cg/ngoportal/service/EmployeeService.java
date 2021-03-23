@@ -10,7 +10,7 @@ import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
 
-
+@Service
 public interface EmployeeService {
 	public boolean login(String username,String password)throws NoSuchEmployeeException;
 	public NeedyPeople addNeedyPerson(NeedyPeople person);

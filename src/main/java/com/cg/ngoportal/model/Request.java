@@ -44,10 +44,6 @@ public class Request {
 		return id;
 	}
 
-	public void setRequestId(int requestId) {
-		this.id = requestId;
-	}
-
 	public DonationType getDonationType() {
 		return donationType;
 	}

@@ -1,5 +1,6 @@
 package com.cg.ngoportal.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -33,8 +34,8 @@ public class DonationDistribution {
 	
 	private double amountDistributed;
 	
-	private Date dateOfDistribution;
-	private Date approvalOrRejectedDate;
+	private LocalDate dateOfDistribution;
+	private LocalDate approvalOrRejectedDate;
 	private DonationDistributionStatus status;
 	
 	
@@ -45,7 +46,7 @@ public class DonationDistribution {
 	
 	
 	public DonationDistribution( NeedyPeople person, DonationItem item, Employee distributedBy,
-			double amountDistributed, Date dateOfDistribution, Date approvalOrRejectedDate,
+			double amountDistributed, LocalDate dateOfDistribution, LocalDate approvalOrRejectedDate,
 			DonationDistributionStatus status) {
 		super();
 		this.person = person;
@@ -84,16 +85,16 @@ public class DonationDistribution {
 	public void setAmountDistributed(double amountDistributed) {
 		this.amountDistributed = amountDistributed;
 	}
-	public Date getDateOfDistribution() {
+	public LocalDate getDateOfDistribution() {
 		return dateOfDistribution;
 	}
-	public void setDateOfDistribution(Date dateOfDistribution) {
+	public void setDateOfDistribution(LocalDate dateOfDistribution) {
 		this.dateOfDistribution = dateOfDistribution;
 	}
-	public Date getApprovalOrRejectedDate() {
+	public LocalDate getApprovalOrRejectedDate() {
 		return approvalOrRejectedDate;
 	}
-	public void setApprovalOrRejectedDate(Date approvalOrRejectedDate) {
+	public void setApprovalOrRejectedDate(LocalDate approvalOrRejectedDate) {
 		this.approvalOrRejectedDate = approvalOrRejectedDate;
 	}
 	public DonationDistributionStatus getStatus() {

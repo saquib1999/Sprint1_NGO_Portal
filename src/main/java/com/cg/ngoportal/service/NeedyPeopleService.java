@@ -1,7 +1,9 @@
 package com.cg.ngoportal.service;
 
-import com.cg.ngoportal.model.NeedyPeople;
+import org.springframework.stereotype.Service;
 
+import com.cg.ngoportal.model.NeedyPeople;
+@Service
 public interface NeedyPeopleService {
 	public boolean registerNeedyPerson(NeedyPeople person);
 	public boolean login(NeedyPeople person);

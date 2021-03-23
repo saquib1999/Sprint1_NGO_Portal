@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.service.EmployeeService;
-import com.cg.ngoportal.service.EmployeeServiceImpl;
-@ControllerAdvice
+
+
 @RestController
 public class EmployeeController {
-	
+	/*
 	@Autowired
 	private EmployeeService employeeService;
 	
@@ -51,5 +51,5 @@ public class EmployeeController {
 		return new ResponseEntity<>(npList,HttpStatus.FOUND);
 	}
 	
-
+*/
 }

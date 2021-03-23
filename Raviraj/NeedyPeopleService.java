@@ -18,7 +18,6 @@ public interface NeedyPeopleService {
 	public Request requestForHelp(Request request) throws UserNotLoggedInException;
 	public List<Request> requestStatusCheck() throws UserNotLoggedInException;
 	public String logOut();
-	List<Request> requestStatusCheck(int needyPersonId) throws UserNotLoggedInException;
 	
 	
 	

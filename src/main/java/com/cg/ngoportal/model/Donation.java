@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -16,46 +15,38 @@ import javax.persistence.Table;
 @Table(name = "NDonation")
 public class Donation {
 	@Id
-	@GeneratedValue(generator = "NDONATIONID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NDONATIONID", sequenceName = "NDONATION_ID",allocationSize=1,initialValue = 1)
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SequenceGenerator(name = "NDONATIONID", sequenceName = "NDONATION_ID", allocationSize = 1, initialValue = 100)
+
 	private int id;
-	@OneToOne(cascade = CascadeType.ALL)
-	private Donor donor;
+	private int donorId;
 	@OneToOne(cascade = CascadeType.ALL)
 	private DonationItem item;
 	private double amount;
-	private Date date;
-	
-	
-	
-	
-	public Donation(Donor donor, DonationItem item, double amount, Date date) {
+	private Date dateOfDonation;
+
+	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation) {
 		super();
-		this.donor = donor;
+		this.donorId = donorId;
 		this.item = item;
 		this.amount = amount;
-		this.date = date;
+		this.dateOfDonation = dateOfDonation;
 	}
 
 	public Donation() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public int getId() {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public int getDonorId() {
+		return donorId;
 	}
 
-	public Donor getDonor() {
-		return donor;
-	}
-
-	public void setDonor(Donor donor) {
-		this.donor = donor;
+	public void setDonorId(int donorId) {
+		this.donorId = donorId;
 	}
 
 	public DonationItem getItem() {
@@ -74,21 +65,18 @@ public class Donation {
 		this.amount = amount;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getDateOfDonation() {
+		return dateOfDonation;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setDateOfDonation(Date dateOfDonation) {
+		this.dateOfDonation = dateOfDonation;
 	}
 
 	@Override
 	public String toString() {
-		return "Donation [id=" + id + ", donor=" + donor + ", item=" + item + ", amount=" + amount + ", date=" + date
-				+ "]";
+		return "Donation [id=" + id + ", donorId=" + donorId + ", item=" + item + ", amount=" + amount
+				+ ", dateOfDonation=" + dateOfDonation + "]";
 	}
 
-	
-	
-	
 }

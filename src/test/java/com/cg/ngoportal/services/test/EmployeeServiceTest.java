@@ -1,6 +1,5 @@
 package com.cg.ngoportal.services.test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,16 +10,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.event.annotation.BeforeTestExecution;
@@ -46,8 +41,8 @@ import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.RequestStatus;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
-import com.cg.ngoportal.service.EmployeeService;
 import com.cg.ngoportal.service.EmployeeServiceImpl;
+
 
 
 @SpringBootTest
@@ -82,6 +77,7 @@ class EmployeeServiceTest {
 	List<DonationDistribution> distributionsList;
 	List<DonationDistribution> distributionsApprovedList;
 	List<DonationDistribution> distributionsPendingList;
+	List<DonationDistribution> distributedList;
 	
 	DonationDistribution distribution1, distribution2, distribution3;
 	
@@ -101,7 +97,7 @@ class EmployeeServiceTest {
 	void setUp() throws Exception {
 		User userEmp = new User("saquibemp", "saquibpwd", UserType.EMPLOYEE);
 		emp1 = new Employee("saquin", "saquib@gmail.com", "9999988888", null, userEmp);
-		
+		emp1.setActive(1);
 		employeeRepo.save(emp1);
 		
 		needyPeopleList = new ArrayList<NeedyPeople>();
@@ -144,6 +140,9 @@ class EmployeeServiceTest {
 		distributionsPendingList = new ArrayList<DonationDistribution>();
 		distributionsPendingList.add(distribution2);
 		
+		distribution3 = new DonationDistribution(needyPerson1, donationItem1, emp1, 4, date, new Date(), DonationDistributionStatus.FUND_DISBURSED);
+		distributedList = new ArrayList<DonationDistribution>();
+		distributedList.add(distribution3);
 		
 	}
 	
@@ -153,7 +152,7 @@ class EmployeeServiceTest {
 	void testLogin() throws NoSuchEmployeeException {
 		when(userRepo.findByUsernameAndPassword("saquibemp", "saquibpwd")).thenReturn(Optional.of (emp1.getUserLoginDetails()));
 		when(employeeRepo.findByUserLoginDetails(emp1.getUserLoginDetails())).thenReturn(Optional.of(emp1));
-		Assertions.assertEquals(true, employeeService.login("saquibemp", "saquibpwd"));
+		Assertions.assertEquals("saquibemp", employeeService.login("saquibemp", "saquibpwd"));
 		
 	}
 
@@ -197,6 +196,7 @@ class EmployeeServiceTest {
 	void testHelpNeedyPerson() throws UserNotLoggedInException {
 		
 		when(donationDistributionRepo.save(distribution1)).thenReturn(distribution1);
+		when(requestRepo.findById(distribution1.getRequestId())).thenReturn(Optional.of(request1));
 		Assertions.assertEquals(DonationDistributionStatus.FUND_DISBURSED, employeeService.helpNeedyPerson(distribution1).getStatus());
 	}
 
@@ -219,8 +219,20 @@ class EmployeeServiceTest {
 
 	@Test
 	void testCheckApprovedDistribution() throws UserNotLoggedInException {
-		when(donationDistributionRepo.findByStatus(DonationDistributionStatus.APPROVED)).thenReturn(distributionsApprovedList);
+		when(donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.APPROVED, emp1)).thenReturn(distributionsApprovedList);
+		when(employeeRepo.findById(-1)).thenReturn(Optional.of(emp1));
 		Assertions.assertEquals(1, employeeService.checkApprovedDistribution().size());
+		
+		
+		
+	}
+	
+	
+	@Test
+	void testCheckDistributedList() throws UserNotLoggedInException {
+		when(donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.FUND_DISBURSED, emp1)).thenReturn(distributedList);
+		when(employeeRepo.findById(-1)).thenReturn(Optional.of(emp1));
+		Assertions.assertEquals(1, employeeService.checkDistributedList().size());
 		
 		
 		

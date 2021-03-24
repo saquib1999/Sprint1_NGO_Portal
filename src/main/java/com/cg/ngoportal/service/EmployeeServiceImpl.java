@@ -7,22 +7,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
 import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
 import com.cg.ngoportal.dao.NeedyPeopleDao;
 import com.cg.ngoportal.dao.RequestDao;
 import com.cg.ngoportal.dao.UserDao;
-import com.cg.ngoportal.exception.DuplicateEmployeeException;
 import com.cg.ngoportal.exception.DuplicateNeedyPersonException;
 import com.cg.ngoportal.exception.InvalidNeedyPersonObjectException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
-import com.cg.ngoportal.model.Address;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
-import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
@@ -197,7 +193,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<DonationDistribution> checkDonatedList() throws UserNotLoggedInException {
+	public List<DonationDistribution> checkDistributedList() throws UserNotLoggedInException {
 			
 		if (loggedIn) {
 

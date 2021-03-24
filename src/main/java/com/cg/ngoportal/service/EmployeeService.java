@@ -1,19 +1,13 @@
 package com.cg.ngoportal.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
-
-import com.cg.ngoportal.dao.DonationDistributionDao;
-import com.cg.ngoportal.exception.DuplicateEmployeeException;
 import com.cg.ngoportal.exception.DuplicateNeedyPersonException;
 import com.cg.ngoportal.exception.InvalidNeedyPersonObjectException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.DonationDistribution;
-import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 
@@ -29,6 +23,6 @@ public interface EmployeeService {
 	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException;
 	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException;
 	public List<Request> checkPendingRequests() throws UserNotLoggedInException;
-	public List<DonationDistribution> checkDonatedList() throws UserNotLoggedInException;
+	public List<DonationDistribution> checkDistributedList() throws UserNotLoggedInException;
 	public boolean logOut();
 }

@@ -1,17 +1,14 @@
 package com.cg.ngoportal.service;
 
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.cg.ngoportal.dao.AdminDao;
-import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
 import com.cg.ngoportal.dao.RequestDao;
@@ -21,17 +18,12 @@ import com.cg.ngoportal.exception.DuplicateEmployeeException;
 import com.cg.ngoportal.exception.IncorrectUsernameOrPasswordException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
-import com.cg.ngoportal.model.Address;
 import com.cg.ngoportal.model.Admin;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
-import com.cg.ngoportal.model.DonationItem;
-import com.cg.ngoportal.model.DonationType;
 import com.cg.ngoportal.model.Employee;
-import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.RequestStatus;
-import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
 
 @Service

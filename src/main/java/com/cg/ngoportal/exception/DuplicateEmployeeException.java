@@ -1,5 +1,6 @@
 package com.cg.ngoportal.exception;
 
+@SuppressWarnings("serial")
 public class DuplicateEmployeeException extends Exception {
 
 	public DuplicateEmployeeException(String string) {

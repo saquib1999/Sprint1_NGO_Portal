@@ -57,7 +57,6 @@ class NeedyPeopleServiceImplTest {
 	List<Request> requestList;
 	Request request1, request2;
 
-	@SuppressWarnings("deprecation")
 	@Before(value = "")
 	public void init() {
 		MockitoAnnotations.openMocks(this);

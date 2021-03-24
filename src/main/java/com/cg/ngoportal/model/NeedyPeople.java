@@ -1,21 +1,14 @@
 package com.cg.ngoportal.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.springframework.lang.NonNull;
-
-import com.sun.istack.NotNull;
-import com.sun.istack.Nullable;
 
 @Entity
 @Table(name = "NNeedyPeople")

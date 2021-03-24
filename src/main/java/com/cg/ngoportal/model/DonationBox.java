@@ -1,5 +1,6 @@
 package com.cg.ngoportal.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +15,10 @@ public class DonationBox {
 	
 	@Id
 	@GeneratedValue(generator = "NRRN", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NRRN", sequenceName = "NADMIN_ID",allocationSize=1,initialValue = 1000)
+    @SequenceGenerator(name = "NRRN", sequenceName = "NRR_N",allocationSize=1,initialValue = 1000)
 	
 	private int registrationNumber;
+	@Column(unique = true)
 	private String accountNumber;
 	private double totalCollection;
 	

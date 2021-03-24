@@ -1,13 +1,9 @@
 package com.cg.ngoportal.services.test;
 import static org.mockito.Mockito.when;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -19,10 +15,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.event.annotation.BeforeTestClass;
-
 import com.cg.ngoportal.dao.AdminDao;
 import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
+import com.cg.ngoportal.dao.RequestDao;
 import com.cg.ngoportal.exception.DuplicateEmployeeException;
 import com.cg.ngoportal.exception.IncorrectUsernameOrPasswordException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
@@ -35,6 +31,7 @@ import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.DonationType;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
+import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
 import com.cg.ngoportal.service.AdminServiceImpl;
@@ -50,6 +47,9 @@ public class AdminServiceImplTest {
 	
 	@Mock
 	DonationDistributionDao donationdistributionDaoRepo;
+	
+	@Mock
+	RequestDao requestRepo;
 	
 	@InjectMocks
 	AdminServiceImpl adminService;
@@ -163,6 +163,7 @@ public class AdminServiceImplTest {
 	public void TestapproveDonation() throws UserNotLoggedInException {
 		when(donationdistributionDaoRepo.findById(dd1.getId())).thenReturn(Optional.of(dd1));
 		when(donationdistributionDaoRepo.save(dd1)).thenReturn(dd4);
+		when(requestRepo.findById(dd1.getRequestId())).thenReturn(Optional.of(new Request()));
 		Assertions.assertEquals(dd4, adminService.approveDonation(dd1));
 	}
 	

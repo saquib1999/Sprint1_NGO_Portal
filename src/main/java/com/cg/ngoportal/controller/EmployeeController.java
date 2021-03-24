@@ -99,9 +99,9 @@ public class EmployeeController {
 		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(),HttpStatus.FOUND);
 	}
 	
-	@GetMapping("/donated-list")
+	@GetMapping("/distributed-list")
 	public ResponseEntity<List<DonationDistribution>> donatedList() throws UserNotLoggedInException{
-		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDonatedList(),HttpStatus.FOUND);
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDistributedList(),HttpStatus.FOUND);
 	}
 
 }

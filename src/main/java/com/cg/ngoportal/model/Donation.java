@@ -26,6 +26,7 @@ public class Donation {
 	private DonationItem item;
 	private double amount;
 	private Date dateOfDonation;
+	private String ngo;
 	
 	
 	public Donation(DonationItem item, double amount) {
@@ -41,8 +42,19 @@ public class Donation {
 		this.amount = amount;
 		this.dateOfDonation = dateOfDonation;
 	}
+	
+	
 
 	
+
+	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation, String ngo) {
+		super();
+		this.donorId = donorId;
+		this.item = item;
+		this.amount = amount;
+		this.dateOfDonation = dateOfDonation;
+		this.ngo = ngo;
+	}
 
 	public Donation() {
 		// TODO Auto-generated constructor stub
@@ -89,12 +101,24 @@ public class Donation {
 	public void setDateOfDonation(Date dateOfDonation) {
 		this.dateOfDonation = dateOfDonation;
 	}
+	
+	
+
+	public String getNgo() {
+		return ngo;
+	}
+
+	public void setNgo(String ngo) {
+		this.ngo = ngo;
+	}
 
 	@Override
 	public String toString() {
 		return "Donation [id=" + id + ", donorId=" + donorId + ", item=" + item + ", amount=" + amount
-				+ ", dateOfDonation=" + dateOfDonation + "]";
+				+ ", dateOfDonation=" + dateOfDonation + ", ngo=" + ngo + "]";
 	}
+
+	
 
 	
 

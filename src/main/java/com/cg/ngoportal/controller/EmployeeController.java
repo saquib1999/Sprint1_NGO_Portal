@@ -22,6 +22,7 @@ import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
+import com.cg.ngoportal.model.RequestStatus;
 import com.cg.ngoportal.service.EmployeeService;
 
 @RestController
@@ -86,6 +87,8 @@ public class EmployeeController {
 	
 	@PostMapping("/employee/approve")
 	public ResponseEntity<DonationDistribution> approveRequest(@RequestBody Request request ) throws UserNotLoggedInException{
+		if (request.getStatus() == RequestStatus.REJECTED_BY_EMPLOYEE)
+			return new ResponseEntity<>(employeeService.approveDonationDistributionEmployeeLevel(request, null), HttpStatus.CONFLICT);
 		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistributionEmployeeLevel(request, new DonationDistribution(new DonationItem())),HttpStatus.ACCEPTED);
 	}
 	

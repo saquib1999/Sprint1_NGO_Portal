@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
 import com.cg.ngoportal.dao.NeedyPeopleDao;
@@ -17,6 +19,7 @@ import com.cg.ngoportal.exception.InvalidNeedyPersonObjectException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
+import com.cg.ngoportal.model.DonationBox;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
 import com.cg.ngoportal.model.Employee;
@@ -34,6 +37,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private EmployeeDao employeeRepo; 
 	@Autowired
 	private DonationDistributionDao donationDistributionRepo;
+	
+	@Autowired
+	DonationBoxDao donationBoxRepo;
 	
 	@Autowired
 	private UserDao userRepo;
@@ -89,6 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			User user = userRepo.findByUsername(person.getUserLoginDetails().getUsername()).orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
 			NeedyPeople deleteNeedyPerson = needyPeopleRepo.findByUserLoginDetails(user)
 					.orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
+			
 			needyPeopleRepo.delete(deleteNeedyPerson);
 			return deleteNeedyPerson;
 		}
@@ -129,6 +136,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public DonationDistribution helpNeedyPerson(DonationDistribution distribute) throws UserNotLoggedInException {
 		if (loggedIn) {
+			
+			DonationBox donationBox = donationBoxRepo.findByNgoName(distribute.getNgo()).get();
+			donationBox.setTotalCollection(donationBox.getTotalCollection() -
+					(distribute.getAmountDistributed() * distribute.getItem().getItem().getVal()));
+			
+			
 			Request request= requestRepo.findById(distribute.getRequestId()).get();
 			request.setStatus(RequestStatus.FUND_DISBURSED);
 			
@@ -136,6 +149,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			
 			distribute.setDateOfDistribution(new Date());
 			distribute.setStatus(DonationDistributionStatus.FUND_DISBURSED);
+			distribute.setAmountDistributed(request.getAmountOrQuantity());
 			
 		return 	donationDistributionRepo.save(distribute);
 		}
@@ -156,6 +170,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		// TODO Auto-generated method stub
 		
 		if (loggedIn) {
+			
+			if (request.getStatus() == RequestStatus.REJECTED_BY_EMPLOYEE) {
+				requestRepo.save(request);
+				return null;
+			}
 			NeedyPeople needyPerson = needyPeopleRepo.findById(request.getNeedyPersonId()).get();
 			//DonationItem donationItem = new DonationItem(request.getDonationType(), request.getReason());
 			distribution.setDistributedBy(employeeRepo.findById(employeeId).orElseThrow(()->new UserNotLoggedInException("Employee Not Logged In")));

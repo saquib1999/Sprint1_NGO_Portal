@@ -35,6 +35,7 @@ public class DonationDistribution {
 	private Date dateOfDistribution;
 	private Date approvalOrRejectedDate;
 	private DonationDistributionStatus status;
+	private String ngo;
 	
 	
 	
@@ -109,6 +110,18 @@ public class DonationDistribution {
 	}
 	
 	
+	
+	
+	public String getNgo() {
+		return ngo;
+	}
+
+
+	public void setNgo(String ngo) {
+		this.ngo = ngo;
+	}
+
+
 	public int getRequestId() {
 		return requestId;
 	}

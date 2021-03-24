@@ -10,6 +10,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDao;
 import com.cg.ngoportal.dao.DonorDao;
 import com.cg.ngoportal.dao.UserDao;
@@ -17,6 +18,7 @@ import com.cg.ngoportal.exception.DuplicateDonorException;
 import com.cg.ngoportal.exception.NoSuchDonorException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Donation;
+import com.cg.ngoportal.model.DonationBox;
 import com.cg.ngoportal.model.Donor;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
@@ -31,6 +33,10 @@ public class DonorServiceImpl implements DonorService{
 	UserDao userRepo;
 	@Autowired
 	JavaMailSender mailSender;
+	@Autowired
+	DonationBoxDao donationBoxRepo;
+	
+	
 	private boolean loggedIn = true;
 	private int donorId=1000;
 	
@@ -61,6 +67,13 @@ public class DonorServiceImpl implements DonorService{
 		if(loggedIn==true) {
 			donation.setDonorId(donorId);
 			donation.setDateOfDonation(new Date());
+			DonationBox donationBox=donationBoxRepo.findByNgoName(donation.getNgo()).orElseThrow();
+			System.out.println(donationBox.getTotalCollection());
+			System.out.println(donation.getItem().getItem().getVal());
+			donationBox.setTotalCollection(donationBox.getTotalCollection()+(donation.getAmount()*donation.getItem().getItem().getVal()));
+			System.out.println(donationBox.getTotalCollection());
+			donationBoxRepo.save(donationBox);
+			
 			Donor donor=donorRepo.findById(donorId).orElseThrow();
 			message.setFrom("aladdin.aladdin0708@gmail.com");
 			message.setTo(donor.getEmail());

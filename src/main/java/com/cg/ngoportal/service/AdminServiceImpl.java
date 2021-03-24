@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.ngoportal.dao.AdminDao;
+import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDistributionDao;
 import com.cg.ngoportal.dao.EmployeeDao;
 import com.cg.ngoportal.dao.RequestDao;
@@ -19,6 +20,7 @@ import com.cg.ngoportal.exception.IncorrectUsernameOrPasswordException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Admin;
+import com.cg.ngoportal.model.DonationBox;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
 import com.cg.ngoportal.model.Employee;
@@ -41,6 +43,9 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	UserDao userDaoRepo;
 	private boolean loggedIn = true;
+	
+	@Autowired
+	DonationBoxDao donationBoxRepo;
 	
 	@Autowired
 	RequestDao requestRepo;
@@ -178,12 +183,43 @@ public class AdminServiceImpl implements AdminService {
 		if(loggedIn) {
 			//distribution.setStatus(DonationDistributionStatus.APPROVED);
 			Request request= requestRepo.findById(distribution.getRequestId()).get();
-			request.setStatus(RequestStatus.APPROVED_BY_ADMIN);
+			
 			requestRepo.save(request);
 			DonationDistribution dd = donationdistributionDaoRepo.findById(distribution.getId()).get();
-			dd.setStatus(DonationDistributionStatus.APPROVED);
+			dd.setStatus(distribution.getStatus());
 			dd.setApprovalOrRejectedDate(new Date());
+			
+			if(distribution.getStatus() == DonationDistributionStatus.APPROVED) {
+				dd.setNgo(distribution.getNgo());
+				request.setStatus(RequestStatus.APPROVED_BY_ADMIN);
+			}
+			else
+				request.setStatus(RequestStatus.REJECTED_BY_ADMIN);
+			
+			
 			return donationdistributionDaoRepo.save(dd);
+		}
+		else
+			throw new UserNotLoggedInException("Please Login First");
+	}
+	
+	
+	@Override
+	public DonationBox addNgo(DonationBox newNgo) throws UserNotLoggedInException{
+		if(loggedIn) {
+			newNgo.setNgoName(newNgo.getNgoName().toUpperCase());
+			return donationBoxRepo.save(newNgo);
+		}
+		else
+			throw new UserNotLoggedInException("Please Login First");
+	}
+	
+	
+	@Override
+	public List<DonationBox> findAllNgo() throws UserNotLoggedInException{
+		if(loggedIn) {
+			List<DonationBox> dlist = (List<DonationBox>) donationBoxRepo.findAll();
+			return dlist;
 		}
 		else
 			throw new UserNotLoggedInException("Please Login First");

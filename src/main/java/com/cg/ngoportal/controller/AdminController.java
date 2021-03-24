@@ -18,6 +18,7 @@ import com.cg.ngoportal.exception.IncorrectUsernameOrPasswordException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Admin;
+import com.cg.ngoportal.model.DonationBox;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.service.AdminService;
@@ -85,6 +86,17 @@ public class AdminController {
 		public ResponseEntity<DonationDistribution> approveDonation(@RequestBody DonationDistribution dd) throws UserNotLoggedInException{
 			return new ResponseEntity<DonationDistribution>(adminService.approveDonation(dd), HttpStatus.ACCEPTED);
 		}
+		
+		@PostMapping("/add-ngo")
+		public ResponseEntity<DonationBox> addNgo(@RequestBody DonationBox db)throws UserNotLoggedInException{
+			return new ResponseEntity<DonationBox>(adminService.addNgo(db), HttpStatus.ACCEPTED);
+		}
+		
+		@GetMapping("/find-all-ngos")
+		public ResponseEntity<List<DonationBox>> findAllNgo() throws UserNotLoggedInException{
+			return new ResponseEntity<List<DonationBox>>(adminService.findAllNgo(), HttpStatus.OK);
+		}
+		
 		//working
 		//logout
 		@GetMapping("/logout")

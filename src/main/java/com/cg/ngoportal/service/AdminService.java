@@ -9,6 +9,7 @@ import com.cg.ngoportal.exception.IncorrectUsernameOrPasswordException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Admin;
+import com.cg.ngoportal.model.DonationBox;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.Employee;
 
@@ -24,4 +25,6 @@ public interface AdminService {
 	public List<DonationDistribution> findAllPendingDonations() throws UserNotLoggedInException;
 	public DonationDistribution approveDonation(DonationDistribution distribution) throws UserNotLoggedInException;
 	public String logout();
+	public DonationBox addNgo(DonationBox newNgo) throws UserNotLoggedInException;
+	public List<DonationBox> findAllNgo() throws UserNotLoggedInException;
 }

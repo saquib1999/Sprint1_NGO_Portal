@@ -14,17 +14,15 @@ public class Request {
 
 	@Id
 	@GeneratedValue(generator = "NREQUEST_ID", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "NREQUEST_ID", sequenceName = "NREQUESTID",allocationSize=1,initialValue = 100)
+	@SequenceGenerator(name = "NREQUEST_ID", sequenceName = "NREQUESTID", allocationSize = 1, initialValue = 100)
 	private int id;
-	
-	
+
 	private int needyPersonId;
-	
+
 	private DonationType donationType;
 	private double amountOrQuantity;
 	private String reason;
-	private RequestStatus status;
-	
+	private RequestStatus status = RequestStatus.PENDING;
 
 	public Request(int needyPersonId, DonationType donationType, double amount, String reason) {
 		super();
@@ -32,21 +30,20 @@ public class Request {
 		this.donationType = donationType;
 		this.amountOrQuantity = amount;
 		this.reason = reason;
-		this.status = RequestStatus.PENDING;
+	
 	}
-
 
 	public Request() {
 		super();
 	}
 
-	public int getRequestId() {
+	
+
+	public int getId() {
 		return id;
 	}
 
-	public void setRequestId(int requestId) {
-		this.id = requestId;
-	}
+	
 
 	public DonationType getDonationType() {
 		return donationType;
@@ -64,7 +61,6 @@ public class Request {
 		this.amountOrQuantity = amount;
 	}
 
-
 	public String getReason() {
 		return reason;
 	}
@@ -72,7 +68,6 @@ public class Request {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
-
 
 	public int getNeedyPersonId() {
 		return needyPersonId;
@@ -82,17 +77,13 @@ public class Request {
 		this.needyPersonId = needyPersonId;
 	}
 
-	
-
 	public RequestStatus getStatus() {
 		return status;
 	}
 
-
 	public void setStatus(RequestStatus status) {
 		this.status = status;
 	}
-
 
 	@Override
 	public String toString() {
@@ -100,5 +91,4 @@ public class Request {
 				+ ", amountOrQuantity=" + amountOrQuantity + ", reason=" + reason + ", status=" + status + "]";
 	}
 
-	
 }

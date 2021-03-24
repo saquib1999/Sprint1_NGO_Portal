@@ -1,5 +1,6 @@
 package com.cg.ngoportal.exception;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.NoSuchElementException;
 
@@ -108,4 +109,36 @@ public class ControllerExceptionHandler {
 
 		return new ResponseEntity<>(errorDetail,HttpStatus.BAD_REQUEST);
 	}
+	
+	@ResponseBody
+	@ExceptionHandler(DuplicateDonorException.class)
+	ResponseEntity<?> exceptionHandler(DuplicateDonorException ex, WebRequest request)
+	{
+		ErrorDetail  errorDetail = new ErrorDetail(new Date(),ex.getMessage(),request.getDescription(false));
+	
+
+		return new ResponseEntity<>(errorDetail,HttpStatus.CONFLICT);
+	}
+	
+	
+	@ResponseBody
+	@ExceptionHandler(NoSuchDonorException.class)
+	ResponseEntity<?> exceptionHandler(NoSuchDonorException ex, WebRequest request)
+	{
+		ErrorDetail  errorDetail = new ErrorDetail(new Date(),ex.getMessage(),request.getDescription(false));
+	
+
+		return new ResponseEntity<>(errorDetail,HttpStatus.BAD_REQUEST);
+	}
+	
+	@ResponseBody
+	@ExceptionHandler(SQLException.class)
+	ResponseEntity<?> exceptionHandler(SQLException ex, WebRequest request)
+	{
+		ErrorDetail  errorDetail = new ErrorDetail(new Date(),ex.getMessage(),request.getDescription(false));
+	
+
+		return new ResponseEntity<>(errorDetail,HttpStatus.BAD_REQUEST);
+	}
+	
 }

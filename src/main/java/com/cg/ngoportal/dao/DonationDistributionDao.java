@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
+import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.RequestStatus;
 @Repository
@@ -16,4 +17,6 @@ public interface DonationDistributionDao extends JpaRepository<DonationDistribut
 
 //	@Query("Select d from DonationDistribution d where d.status= ?1")
 	List<DonationDistribution> findByStatus(DonationDistributionStatus status);
+	List<DonationDistribution> findByStatusAndDistributedBy(DonationDistributionStatus status, Employee emp);
+
 }

@@ -2,6 +2,7 @@ package com.cg.ngoportal.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,19 +25,18 @@ public class NeedyPeople {
     @SequenceGenerator(name = "NNP", sequenceName = "NN_P",allocationSize=1,initialValue = 1000)
 	private int id;
 	
-	@Column(nullable = false)
+	
 	private String name;
 	
-	@Column(nullable = false)
+	
 	private String phone;
-	@Column(nullable = false)
+	
 	private double familyIncome;
 	
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	
 	private User userLoginDetails;
-	
+	@Embedded
 	private Address address;
 	
 	

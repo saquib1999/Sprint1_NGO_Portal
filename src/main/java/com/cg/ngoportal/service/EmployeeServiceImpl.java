@@ -1,6 +1,7 @@
 
 package com.cg.ngoportal.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,18 +48,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private boolean loggedIn = true;
 	private int employeeId = -1;
 	@Override
-	public boolean login(String username,String password) throws NoSuchEmployeeException {
-		User user = userRepo.findByUsernameAndPassword(username, password).orElseThrow(()-> new NoSuchEmployeeException("Either Username or password Incorrect"));
-		loggedIn = true;
+	public String login(String username,String password) throws NoSuchEmployeeException {
+		
 //		User user2 = new User("saquib123", "saquib1234", UserType.EMPLOYEE);
 //		Employee emp = new Employee("SaquibEmp", "empemail", "95999", null, user2);
 //		employeeRepo.save(emp);
-		System.out.println(user.getId() + "   " + "saquib123");
-		employeeId = employeeRepo.findByUserLoginDetails(user).get().getId();
 		
-		System.out.println(employeeId + "   " + "saquib123");
-
-		return true;
+		User user = userRepo.findByUsernameAndPassword(username, password).orElseThrow(()-> new NoSuchEmployeeException("Either Username or password Incorrect"));
+		
+		Employee employee = employeeRepo.findByUserLoginDetails(user).get();
+		
+		if(employee.getActive() != 1)
+			throw new NoSuchEmployeeException("Inactive Employee");
+		loggedIn = true;
+		employeeId = employee.getId();
+		return user.getUsername();
 	}
 
 	@Override
@@ -70,6 +74,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 				if(person.getUserLoginDetails().getUserType()!= UserType.NEEDYPERSON)
 					throw new InvalidNeedyPersonObjectException("Check the User Type");
 				person.setName(person.getName().toUpperCase());
+				person.getUserLoginDetails().setUserType(UserType.NEEDYPERSON);
+
 				return needyPeopleRepo.save(person);
 			}
 			else 
@@ -127,6 +133,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public DonationDistribution helpNeedyPerson(DonationDistribution distribute) throws UserNotLoggedInException {
 		if (loggedIn) {
+			Request request= requestRepo.findById(distribute.getRequestId()).get();
+			request.setStatus(RequestStatus.FUND_DISBURSED);
+			
+			requestRepo.save(request);
+			
+			distribute.setDateOfDistribution(new Date());
 			distribute.setStatus(DonationDistributionStatus.FUND_DISBURSED);
 			
 		return 	donationDistributionRepo.save(distribute);
@@ -149,13 +161,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		if (loggedIn) {
 			NeedyPeople needyPerson = needyPeopleRepo.findById(request.getNeedyPersonId()).get();
-			DonationItem donationItem = new DonationItem(request.getDonationType(), request.getReason());
+			//DonationItem donationItem = new DonationItem(request.getDonationType(), request.getReason());
 			distribution.setDistributedBy(employeeRepo.findById(employeeId).orElseThrow(()->new UserNotLoggedInException("Employee Not Logged In")));
 			distribution.setStatus(DonationDistributionStatus.PENDING);
+			distribution.setRequestId(request.getId());
 			distribution.setPerson(needyPerson);
 			distribution.getItem().setItem(request.getDonationType());
 			distribution.getItem().setDescription(request.getReason());
-			request.setStatus(RequestStatus.EMPLOYEE_APPROVED);
+			request.setStatus(RequestStatus.APPROVED_BY_EMPLOYEE);
 			requestRepo.save(request);
 			return donationDistributionRepo.save(distribution);
 		}
@@ -168,7 +181,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		
 		if (loggedIn) {
-			return donationDistributionRepo.findByStatus(DonationDistributionStatus.APPROVED);
+			
+			return donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.APPROVED, employeeRepo.findById(employeeId).get());
 		}
 		else
 			throw new UserNotLoggedInException("Employee Not Logged In");
@@ -181,6 +195,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 		else
 			throw new UserNotLoggedInException("Employee Not Logged In");
 	}
+
+	@Override
+	public List<DonationDistribution> checkDonatedList() throws UserNotLoggedInException {
+			
+		if (loggedIn) {
+
+			return donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.FUND_DISBURSED, employeeRepo.findById(employeeId).get());
+		}
+		else
+			throw new UserNotLoggedInException("Employee Not Logged In");
+	}
+	
+	
 	
 	
 

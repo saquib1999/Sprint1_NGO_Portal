@@ -15,6 +15,7 @@ public interface RequestDao extends JpaRepository<Request, Integer> {
 //	List<Request> findByStatusContaining(RequestStatus status);
 	@Query("Select r from Request r where r.status= ?1")
 	List<Request> findByStatusContaining(RequestStatus status);
+	List<Request> findByNeedyPersonId(int needyPeopleId);
 
 	
 

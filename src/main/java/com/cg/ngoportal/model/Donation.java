@@ -29,10 +29,12 @@ public class Donation {
 	private Date dateOfDonation;
 	
 	
+	public Donation(DonationItem item, double amount) {
+		super();
+		this.item = item;
+		this.amount = amount;
+	}
 	
-	
-	
-
 	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation) {
 		super();
 		this.donorId = donorId;
@@ -40,6 +42,8 @@ public class Donation {
 		this.amount = amount;
 		this.dateOfDonation = dateOfDonation;
 	}
+
+	
 
 	public Donation() {
 		// TODO Auto-generated constructor stub

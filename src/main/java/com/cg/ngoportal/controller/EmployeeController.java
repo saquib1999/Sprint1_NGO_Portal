@@ -1,21 +1,18 @@
 package com.cg.ngoportal.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.ngoportal.exception.DuplicateEmployeeException;
 import com.cg.ngoportal.exception.DuplicateNeedyPersonException;
 import com.cg.ngoportal.exception.InvalidNeedyPersonObjectException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
@@ -26,7 +23,6 @@ import com.cg.ngoportal.model.DonationItem;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.service.EmployeeService;
-import com.cg.ngoportal.service.EmployeeServiceImpl;
 
 @RestController
 public class EmployeeController {
@@ -34,13 +30,13 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-	@PostMapping("/employee/login")
+	@GetMapping("/employee/login")
 	public ResponseEntity<String> login(@RequestBody Login loginCred) throws NoSuchEmployeeException{
 		System.out.println(loginCred);
 		
-		boolean result = employeeService.login(loginCred.getUsername(), loginCred.getPassword());
+		String result = employeeService.login(loginCred.getUsername(), loginCred.getPassword());
 		
-		return new ResponseEntity<String>("Success",HttpStatus.OK);
+		return new ResponseEntity<String>("Successfully logged in as " + result,HttpStatus.OK);
 			
 		
 	}
@@ -82,7 +78,7 @@ public class EmployeeController {
 		return new ResponseEntity<>(npList,HttpStatus.FOUND);
 	}
 	
-	@PostMapping("/help")
+	@PatchMapping("/help")
 	public ResponseEntity<DonationDistribution> helpNeedyPerson(@RequestBody DonationDistribution donationDistribution) throws UserNotLoggedInException{
 		return new ResponseEntity<DonationDistribution>(employeeService.helpNeedyPerson(donationDistribution),HttpStatus.ACCEPTED);
 		
@@ -101,6 +97,11 @@ public class EmployeeController {
 	@GetMapping("/approved-list")
 	public ResponseEntity<List<DonationDistribution>> approvedDonationList() throws UserNotLoggedInException{
 		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(),HttpStatus.FOUND);
+	}
+	
+	@GetMapping("/donated-list")
+	public ResponseEntity<List<DonationDistribution>> donatedList() throws UserNotLoggedInException{
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDonatedList(),HttpStatus.FOUND);
 	}
 
 }

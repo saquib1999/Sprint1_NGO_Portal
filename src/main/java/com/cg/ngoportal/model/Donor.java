@@ -21,7 +21,7 @@ public class Donor {
 	private String name;
 	private String email;
 	private String phone;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private User userLoginDetails;
 	private Address address;
 

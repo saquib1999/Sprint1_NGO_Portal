@@ -1,11 +1,14 @@
 package com.cg.ngoportal.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "NAdmin")
@@ -15,44 +18,53 @@ public class Admin {
     @SequenceGenerator(name = "NADMINID", sequenceName = "NADMIN_ID",allocationSize=1,initialValue = 1000)
 	
 	private int id;
+	@Column(unique = true)
 	private String username;
+	@JsonIgnore
 	private String password;
-
-	
-	
-	public Admin(String adminUsername, String adminPassword) {
-		super();
-		this.username = adminUsername;
-		this.password = adminPassword;
+	public int getId() {
+		return id;
 	}
+	
+	
 	
 	public Admin() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	public int getAdminId() {
-		return id;
+
+
+	public Admin(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
 	}
-	public void setAdminId(int adminId) {
-		this.id = adminId;
-	}
-	public String getAdminUsername() {
+
+
+
+
+
+
+	public String getUsername() {
 		return username;
 	}
-	public void setAdminUsername(String adminUsername) {
-		this.username = adminUsername;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	public String getAdminPassword() {
+	public String getPassword() {
 		return password;
 	}
-	public void setAdminPassword(String adminPassword) {
-		this.password = adminPassword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
+
 	@Override
 	public String toString() {
-		return "Admin [adminId=" + id + ", adminUsername=" + username + ", adminPassword=" + password
-				+ "]";
+		return "Admin [id=" + id + ", username=" + username + ", password=" + password + "]";
 	}
+
+	
+	
+	
 	
 	
 	

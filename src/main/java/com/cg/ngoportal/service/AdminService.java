@@ -2,17 +2,26 @@ package com.cg.ngoportal.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.cg.ngoportal.exception.DuplicateEmployeeException;
+import com.cg.ngoportal.exception.IncorrectUsernameOrPasswordException;
 import com.cg.ngoportal.exception.NoSuchEmployeeException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
+import com.cg.ngoportal.model.Admin;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.Employee;
 
+@Service
 public interface AdminService {
-	public boolean addEmployee(Employee employee) throws DuplicateEmployeeException;
-	public Employee modifyEmployee(Employee employee) throws NoSuchEmployeeException;
-	public boolean removeEmployee(int employeeId) throws NoSuchEmployeeException;
-	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException;
-	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException;
-	public List<Employee> findAllEmployee() throws NoSuchEmployeeException;
-	public boolean approveDonation(DonationDistribution distribution);
+	public String login(Admin admin) throws IncorrectUsernameOrPasswordException;
+	public Employee addEmployee(Employee employee) throws DuplicateEmployeeException, UserNotLoggedInException;
+	public Employee modifyEmployee(int employeeId, Employee employee) throws NoSuchEmployeeException, UserNotLoggedInException;
+	public boolean removeEmployee(String username) throws NoSuchEmployeeException, UserNotLoggedInException;
+	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException, UserNotLoggedInException;
+	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException, UserNotLoggedInException;
+	public List<Employee> findAllEmployee() throws NoSuchEmployeeException, UserNotLoggedInException;
+	public List<DonationDistribution> findAllPendingDonations() throws UserNotLoggedInException;
+	public DonationDistribution approveDonation(DonationDistribution distribution) throws UserNotLoggedInException;
+	public String logout();
 }

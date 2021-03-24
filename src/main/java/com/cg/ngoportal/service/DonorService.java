@@ -1,16 +1,21 @@
 package com.cg.ngoportal.service;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
+
 import com.cg.ngoportal.exception.DuplicateDonorException;
 import com.cg.ngoportal.exception.NoSuchDonorException;
+import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Donation;
 import com.cg.ngoportal.model.Donor;
-
+@Service
 public interface DonorService {
-	public boolean registerDonor(Donor donor) throws DuplicateDonorException;
-	public boolean login(Donor donor) throws NoSuchDonorException;
-	public Donation donateToNGO(Donation donation);
-	public void sendThankyouMailToDonator(Donor donor);
-	public String forgotPassword(String username);
-	public String resetPassword(String username);
-	public void emailPasswordToDonor(String email);
+	public Donor registerDonor(Donor donor) throws DuplicateDonorException;
+	public int login(String userName,String password) throws NoSuchDonorException;
+	public Donation donateToNGO(Donation donation,SimpleMailMessage message) throws UserNotLoggedInException;
+	public String sendThankyouMailToDonator(SimpleMailMessage message) throws UserNotLoggedInException;
+	public String forgotPassword(String username,SimpleMailMessage message)throws NoSuchDonorException;
+	public String resetPassword(String username,String oldPassword,String newPassword)throws NoSuchDonorException;
+	public String emailPasswordToDonor(SimpleMailMessage message)throws NoSuchDonorException, UserNotLoggedInException;
+	public String logOut();
 }

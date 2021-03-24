@@ -29,6 +29,7 @@ public class Employee {
 	@OneToOne(cascade = CascadeType.ALL)
 	private User userLoginDetails;
 	
+	private int active;
 	
 	
 	public Employee() {
@@ -44,6 +45,18 @@ public class Employee {
 		this.address = address;
 		this.userLoginDetails = userLoginDetails;
 	}
+
+	public Employee( String name, String email, String phone, Address address, User userLoginDetails, int active) {
+		super();
+		
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+		this.userLoginDetails = userLoginDetails;
+		this.active = active;
+	}
+
 
 	public int getId() {
 		return id;
@@ -89,12 +102,24 @@ public class Employee {
 	public void setUserLoginDetails(User userLoginDetails) {
 		this.userLoginDetails = userLoginDetails;
 	}
+	
+	
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
 
 	@Override
 	public String toString() {
 		return "Employee [id=" + id + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address="
-				+ address + ", userLoginDetails=" + userLoginDetails + "]";
+				+ address + ", userLoginDetails=" + userLoginDetails + ", active=" + active + "]";
 	}
+
+	
 	
 	
 	

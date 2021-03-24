@@ -10,6 +10,9 @@ import javax.persistence.Table;
 
 import org.springframework.lang.NonNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.sun.istack.NotNull;
 
 @Entity
@@ -20,12 +23,12 @@ public class User {
     @SequenceGenerator(name = "NUSER_ID", sequenceName = "NUSERID",allocationSize=1,initialValue = 1000)
 	private int id;
 	
-	@Column(unique=true,nullable = false)
+	@Column(unique=true)
 	
 	private String username;
-	@Column(nullable = false)
+
+	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
-	@Column(nullable = false)
 	private UserType userType;
 	
 	public User() {
@@ -50,7 +53,7 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	
 	public String getPassword() {
 		return password;
 	}
@@ -69,7 +72,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", userType=" + userType
+		return "User [id=" + id + ", username=" + username + " userType=" + userType
 				+ "]";
 	}
 	

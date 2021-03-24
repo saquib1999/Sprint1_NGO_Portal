@@ -9,12 +9,13 @@ import com.cg.ngoportal.exception.NoSuchNeedyPersonException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
+import com.cg.ngoportal.model.User;
 
 @Service
 public interface NeedyPeopleService {
 	
 	public NeedyPeople register(NeedyPeople person) throws DuplicateNeedyPersonException;
-	public String loginNeedyPerson(String username, String password) throws NoSuchNeedyPersonException;
+	public String login(User user) throws NoSuchNeedyPersonException;
 	public Request requestForHelp(Request request) throws UserNotLoggedInException;
 	public List<Request> requestStatusCheck() throws UserNotLoggedInException;
 	public String logOut();

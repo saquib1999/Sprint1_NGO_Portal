@@ -113,15 +113,6 @@ class NeedyPeopleServiceImplTest {
 
 	}
 
-	// Passed.
-	@Test
-	void testLoginNeedyPerson() throws NoSuchNeedyPersonException {
-		when(userRepoMock.findByUsernameAndPassword("pawan", "pk"))
-				.thenReturn(Optional.of(needyPerson1.getUserLoginDetails()));
-		when(needyPeopleRepoMock.findByUserLoginDetails(needyPerson1.getUserLoginDetails()))
-				.thenReturn(Optional.of(needyPerson1));
-		Assertions.assertEquals("Logged In as "+user1.getUsername(), needyPeopleService.loginNeedyPerson("pawan", "pk"));
-	}
 
 	// Passed.
 	@Test

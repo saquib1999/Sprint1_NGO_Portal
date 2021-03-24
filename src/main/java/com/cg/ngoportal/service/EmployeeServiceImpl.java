@@ -50,13 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private boolean loggedIn = true;
 	private int employeeId = -1;
 	@Override
-	public String login(String username,String password) throws NoSuchEmployeeException {
-		
-//		User user2 = new User("saquib123", "saquib1234", UserType.EMPLOYEE);
-//		Employee emp = new Employee("SaquibEmp", "empemail", "95999", null, user2);
-//		employeeRepo.save(emp);
-		
-		User user = userRepo.findByUsernameAndPassword(username, password).orElseThrow(()-> new NoSuchEmployeeException("Either Username or password Incorrect"));
+	public String login(User user) throws NoSuchEmployeeException {
 		
 		Employee employee = employeeRepo.findByUserLoginDetails(user).get();
 		
@@ -64,12 +58,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 			throw new NoSuchEmployeeException("Inactive Employee");
 		loggedIn = true;
 		employeeId = employee.getId();
-		return user.getUsername();
+		return "Employee Logged In as "+ user.getUsername();
 	}
 
 	@Override
 	public NeedyPeople addNeedyPerson(NeedyPeople person) throws  DuplicateNeedyPersonException,UserNotLoggedInException, InvalidNeedyPersonObjectException {
-		// TODO Auto-generated method stub
 		if(loggedIn) {
 			if( userRepo.findByUsername(person.getUserLoginDetails().getUsername()).isEmpty())
 			{	
@@ -114,7 +107,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws UserNotLoggedInException {
-		// TODO Auto-generated method stub
 		if (loggedIn) {
 			 return needyPeopleRepo.findByNameContainingIgnoreCaseOrderByNameAsc(name);
 		}
@@ -124,7 +116,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<NeedyPeople> findAllNeedyPeople() throws UserNotLoggedInException {
-		// TODO Auto-generated method stub
 		
 		if (loggedIn) {
 			return (List<NeedyPeople>) needyPeopleRepo.findAll();
@@ -159,7 +150,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean logOut() {
-		// TODO Auto-generated method stub
 		loggedIn = false;
 		employeeId = -1;
 		return true;
@@ -167,7 +157,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException, DataIntegrityViolationException {
-		// TODO Auto-generated method stub
 		
 		if (loggedIn) {
 			
@@ -176,13 +165,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 				return null;
 			}
 			NeedyPeople needyPerson = needyPeopleRepo.findById(request.getNeedyPersonId()).get();
-			//DonationItem donationItem = new DonationItem(request.getDonationType(), request.getReason());
 			distribution.setDistributedBy(employeeRepo.findById(employeeId).orElseThrow(()->new UserNotLoggedInException("Employee Not Logged In")));
 			distribution.setStatus(DonationDistributionStatus.PENDING);
 			distribution.setRequestId(request.getId());
 			distribution.setPerson(needyPerson);
 			distribution.getItem().setItem(request.getDonationType());
 			distribution.getItem().setDescription(request.getReason());
+			distribution.setAmountDistributed(request.getAmountOrQuantity());
 			request.setStatus(RequestStatus.APPROVED_BY_EMPLOYEE);
 			requestRepo.save(request);
 			return donationDistributionRepo.save(distribution);

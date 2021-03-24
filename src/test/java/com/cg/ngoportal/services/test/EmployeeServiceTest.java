@@ -148,14 +148,7 @@ class EmployeeServiceTest {
 	
 	
 
-	@Test
-	void testLogin() throws NoSuchEmployeeException {
-		when(userRepo.findByUsernameAndPassword("saquibemp", "saquibpwd")).thenReturn(Optional.of (emp1.getUserLoginDetails()));
-		when(employeeRepo.findByUserLoginDetails(emp1.getUserLoginDetails())).thenReturn(Optional.of(emp1));
-		Assertions.assertEquals("saquibemp", employeeService.login("saquibemp", "saquibpwd"));
-		
-	}
-
+	
 	@Test
 	void testAddNeedyPerson() throws DuplicateNeedyPersonException, UserNotLoggedInException, InvalidNeedyPersonObjectException {
 		when(needyPeopleRepo.save(needyPerson3)).thenReturn(needyPerson3);

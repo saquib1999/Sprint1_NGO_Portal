@@ -10,10 +10,11 @@ import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
+import com.cg.ngoportal.model.User;
 
 @Service
 public interface EmployeeService {
-	public String login(String username,String password)throws NoSuchEmployeeException;
+	public String login(User user)throws NoSuchEmployeeException;
 	public NeedyPeople addNeedyPerson(NeedyPeople person) throws  UserNotLoggedInException, DuplicateNeedyPersonException, InvalidNeedyPersonObjectException;
 	public NeedyPeople removeNeedyPerson(NeedyPeople person) throws UserNotLoggedInException, NoSuchNeedyPersonException;
 	public NeedyPeople findNeedyPeopleById(int id) throws UserNotLoggedInException, NoSuchNeedyPersonException;

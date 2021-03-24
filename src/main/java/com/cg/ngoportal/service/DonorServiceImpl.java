@@ -2,19 +2,26 @@ package com.cg.ngoportal.service;
 
 
 
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDao;
 import com.cg.ngoportal.dao.DonorDao;
 import com.cg.ngoportal.dao.UserDao;
 import com.cg.ngoportal.exception.DuplicateDonorException;
+import com.cg.ngoportal.exception.NoDonationException;
 import com.cg.ngoportal.exception.NoSuchDonorException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Donation;
@@ -35,35 +42,38 @@ public class DonorServiceImpl implements DonorService{
 	JavaMailSender mailSender;
 	@Autowired
 	DonationBoxDao donationBoxRepo;
-	
-	
+
+
+
+
 	private boolean loggedIn = true;
 	private int donorId=1000;
-	
+	private String adminEmail = "aladdin.aladdin0708@gmail.com"; 
+
+
 	@Override
 	public Donor registerDonor(Donor donor) throws DuplicateDonorException {
-		// TODO Auto-generated method stub
+
 		Optional<User> user = userRepo.findByUsername(donor.getUserLoginDetails().getUsername());
 		if(user.isEmpty()) 
-			{donor.getUserLoginDetails().setUserType(UserType.DONOR);
-			donorRepo.save(donor);}
+		{donor.getUserLoginDetails().setUserType(UserType.DONOR);
+		donorRepo.save(donor);}
 		else 
 			throw new DuplicateDonorException("Username is already taken.");
 		return donor;
 	}
 
 	@Override
-	public int login(String username,String password) throws NoSuchDonorException {
-		// TODO Auto-generated method stub
-		User user = userRepo.findByUsernameAndPassword(username, password).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
+	public String login(User user) throws NoSuchDonorException {
+
 		loggedIn=true;
 		this.donorId=donorRepo.findByUserLoginDetails(user).get().getId();
-		return donorId;
+		return "Donor Logged In  as " + user.getUsername();
 	}
 
 	@Override
 	public Donation donateToNGO(Donation donation,SimpleMailMessage message) throws UserNotLoggedInException {
-		// TODO Auto-generated method stub	
+
 		if(loggedIn==true) {
 			donation.setDonorId(donorId);
 			donation.setDateOfDonation(new Date());
@@ -73,9 +83,9 @@ public class DonorServiceImpl implements DonorService{
 			donationBox.setTotalCollection(donationBox.getTotalCollection()+(donation.getAmount()*donation.getItem().getItem().getVal()));
 			System.out.println(donationBox.getTotalCollection());
 			donationBoxRepo.save(donationBox);
-			
+
 			Donor donor=donorRepo.findById(donorId).orElseThrow();
-			message.setFrom("aladdin.aladdin0708@gmail.com");
+			message.setFrom(adminEmail);
 			message.setTo(donor.getEmail());
 			message.setText("Thank You for Donation");
 			message.setSubject("Thank You Mail");
@@ -88,16 +98,26 @@ public class DonorServiceImpl implements DonorService{
 	}
 
 	@Override
-	public String sendThankyouMailToDonator(SimpleMailMessage message) throws UserNotLoggedInException {
-		// TODO Auto-generated method stub
+	public String sendCertificateToDonor() throws MessagingException, UserNotLoggedInException{
 		if(loggedIn) {
+
+			if (donationRepo.findByDonorIdOrderByIdDesc(donorId).size() == 0)
+				throw new NoDonationException("Please do the Donation First");
 			Donor donor=donorRepo.findById(donorId).orElseThrow();
-			message.setFrom("aladdin.aladdin0708@gmail.com");
-			message.setTo(donor.getEmail());
-			message.setText("Thank You for Donation");
-			message.setSubject("Thank You Mail");
-			mailSender.send(message);
-			return "Thank You mail sent successfully "+ donor.getName();
+	
+			MimeMessage mimeMessage = mailSender.createMimeMessage();	
+			MimeMessageHelper mimeMessageHelper= new MimeMessageHelper(mimeMessage, true);	
+			mimeMessageHelper.setFrom(adminEmail);
+			mimeMessageHelper.setTo(donor.getEmail());
+			mimeMessageHelper.setText("Thank You for Donation");
+			mimeMessageHelper.setSubject("Certificate  for Donation");	
+			FileSystemResource fileSystem= new FileSystemResource(new File("C:\\Users\\Saquib\\Desktop\\DonationCertificate\\Certificate-of-Donation.jpg"));	
+			mimeMessageHelper.addAttachment(fileSystem.getFilename(),fileSystem);
+			mailSender.send(mimeMessage);
+			return "Certificate sent successfully to your Email";
+
+
+
 		}
 		else
 		{
@@ -107,51 +127,94 @@ public class DonorServiceImpl implements DonorService{
 
 	@Override
 	public String forgotPassword(String username,SimpleMailMessage message) throws NoSuchDonorException {
-		// TODO Auto-generated method stub
-			User user = userRepo.findByUsername(username).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
-			Donor donor=donorRepo.findByUserLoginDetails(user).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
-			message.setFrom("aladdin.aladdin0708@gmail.com");
-			message.setTo(donor.getEmail());
-			message.setText(donor.getUserLoginDetails().getPassword());
-			message.setSubject("Forgot Password ");
-			mailSender.send(message);
-			return "Password sent on email";
-		
+		User user = userRepo.findByUsername(username).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
+		Donor donor=donorRepo.findByUserLoginDetails(user).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
+		message.setFrom(adminEmail);
+		message.setTo(donor.getEmail());
+		message.setText(donor.getUserLoginDetails().getPassword());
+		message.setSubject("Forgot Password ");
+		mailSender.send(message);
+		return "Password sent on email";
+
 	}
 
 	@Override
 	public String resetPassword(String username,String oldPassword,String newPassword) throws NoSuchDonorException {
-		// TODO Auto-generated method stub
 		User user = userRepo.findByUsernameAndPassword(username, oldPassword).orElseThrow(()->new NoSuchDonorException("Donor details not found"));
 		user.setPassword(newPassword);
 		userRepo.save(user);
 		return "Password reset successfully";	
 	}
 
+
+
 	@Override
-	public String emailPasswordToDonor(SimpleMailMessage message) throws UserNotLoggedInException {
+	public String logOut() {
+
+		loggedIn = false;
+		donorId = -1;
+		return "Logged Out!";
+
+	}
+
+	@Override
+	public Donation lastDonationReceipt(SimpleMailMessage message) throws UserNotLoggedInException {
+
 		if(loggedIn) {
-			Donor donor=donorRepo.findById(donorId).orElseThrow();
-			message.setFrom("aladdin.aladdin0708@gmail.com");
-			message.setTo(donor.getEmail());
-			message.setText(donor.getUserLoginDetails().getPassword());
-			message.setSubject("Forgot Password ");
-			mailSender.send(message);		
-			return "Password send successfully";
+			List<Donation> donationList = donationRepo.findByDonorIdOrderByIdDesc(donorId);
+			Donor donor=donorRepo.findById(donorId).get();
+			if(donationList.size() > 0){
+				message.setFrom(adminEmail);
+				message.setTo(donor.getEmail());
+				message.setText(donationList.get(0).toString());
+				message.setSubject("Donation Receipt ");
+				mailSender.send(message);	
+
+			}
+			else 
+				new NoDonationException("No Donation Found");
+			
+			return donationList.get(0);
 		}
 		else {
 			throw new UserNotLoggedInException("Please Log In");
 		}
+
 	}
 
 	@Override
-	public String logOut() {
-		// TODO Auto-generated method stub
-		loggedIn = false;
-		donorId = -1;
-		return "Logged Out!";
-		
+	public List<Donation> allDonationReceipt(SimpleMailMessage message) throws UserNotLoggedInException {
+
+
+		if(loggedIn) {
+			List<Donation> donationList = donationRepo.findByDonorIdOrderByIdDesc(donorId);
+			Donor donor=donorRepo.findById(donorId).get();
+			if(donationList.size() > 0){
+				message.setFrom(adminEmail);
+				message.setTo(donor.getEmail());
+
+				StringBuffer stringMessage = new StringBuffer();
+				donationList.stream().forEach((x)->stringMessage.append(x.toString() + "\n"));
+
+				message.setText(stringMessage.toString());
+				message.setSubject("Donation Receipt ");
+				mailSender.send(message);	
+
+
+			}
+			else 
+				new NoDonationException("No Donation Found");
+
+
+			return donationList;
+		}
+		else 
+			throw new UserNotLoggedInException("Please Log In");
+
 	}
-	
+
+
+
+
 
 }

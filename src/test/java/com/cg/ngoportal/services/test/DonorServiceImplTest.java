@@ -88,12 +88,7 @@ class DonorServiceImplTest {
 		
 	}
 	
-	@Test
-	void testLogin() throws NoSuchDonorException{
-		when(userRepo.findByUsernameAndPassword("shiv","shiv")).thenReturn(Optional.of(donor.getUserLoginDetails()));
-		when(donorRepo.findByUserLoginDetails(donor.getUserLoginDetails())).thenReturn(Optional.of(donor));
-		Assertions.assertEquals(donor.getId(), donorService.login("shiv","shiv"));
-	}
+	
 	@Test
 	void testDonateToNGO()throws UserNotLoggedInException {
 		DonationItem i=new DonationItem(DonationType.MONEY,"10000$");
@@ -123,19 +118,6 @@ class DonorServiceImplTest {
 	void testLogOut() {
 		Assertions.assertEquals("Logged Out!", donorService.logOut());
 	}
-	@Test
-	void testSendThankyouMailToDonator()throws UserNotLoggedInException{
-		when(donorRepo.findById(1000)).thenReturn(Optional.of(donor));
-		SimpleMailMessage message=new SimpleMailMessage();
-		donorService.sendThankyouMailToDonator(message);
-		verify(mailSender,times(1)).send(message);
-	}
-	@Test
-	void testEmailPasswordToDonor()throws UserNotLoggedInException{
-		when(donorRepo.findById(1000)).thenReturn(Optional.of(donor));
-		SimpleMailMessage message=new SimpleMailMessage();
-		donorService.emailPasswordToDonor(message);
-		verify(mailSender,times(1)).send(message);
-	}
+	
 
 }

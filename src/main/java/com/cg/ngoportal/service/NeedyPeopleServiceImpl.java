@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.cg.ngoportal.controller.LoginCred;
 import com.cg.ngoportal.dao.NeedyPeopleDao;
 import com.cg.ngoportal.dao.RequestDao;
 import com.cg.ngoportal.dao.UserDao;
@@ -47,12 +49,8 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 
 	// Login Needy Person
 	@Override
-	public String loginNeedyPerson(String username, String password) throws NoSuchNeedyPersonException {
+	public String login(User user) throws NoSuchNeedyPersonException {
 		
-		System.out.println(username +"    "+password);
-		User user = userRepo.findByUsernameAndPassword(username, password)
-				.orElseThrow(() -> new NoSuchNeedyPersonException("Username or Password is incorrect."));
-
 		loggedIn = true;
 		needyPersonId = needyPeopleRepo.findByUserLoginDetails(user).get().getId();
 		return  "Logged In as " +user.getUsername();

@@ -52,9 +52,7 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Override
 	public String login(Admin admin) throws IncorrectUsernameOrPasswordException{
-		// TODO Auto-generated method stub
-//		System.out.println(admin.getUsername());
-//		System.out.println(admin.getPassword());
+		
 //		adminDaoRepo.save(admin);	
 			Admin ad = adminDaoRepo.findByUsernameAndPassword(admin.getUsername(), admin.getPassword()).orElseThrow(() -> new IncorrectUsernameOrPasswordException("Invalid Login Credentials"));
 			loggedIn = true;

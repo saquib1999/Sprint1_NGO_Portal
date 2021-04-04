@@ -46,7 +46,7 @@ public class DonorServiceImpl implements DonorService{
 
 
 
-	private boolean loggedIn = true;
+	private boolean loggedIn = false;
 	private int donorId=1000;
 	private String adminEmail = "aladdin.aladdin0708@gmail.com"; 
 
@@ -78,11 +78,9 @@ public class DonorServiceImpl implements DonorService{
 			donation.setDonorId(donorId);
 			donation.setDateOfDonation(new Date());
 			DonationBox donationBox=donationBoxRepo.findByNgoName(donation.getNgo()).orElseThrow();
-			System.out.println(donationBox.getTotalCollection());
-			System.out.println(donation.getItem().getItem().getVal());
 			donationBox.setTotalCollection(donationBox.getTotalCollection()+(donation.getAmount()*donation.getItem().getItem().getVal()));
-			System.out.println(donationBox.getTotalCollection());
 			donationBoxRepo.save(donationBox);
+			
 
 			Donor donor=donorRepo.findById(donorId).orElseThrow();
 			message.setFrom(adminEmail);

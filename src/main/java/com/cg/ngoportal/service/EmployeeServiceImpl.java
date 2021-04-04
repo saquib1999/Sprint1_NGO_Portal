@@ -47,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private RequestDao requestRepo;
 	
-	private boolean loggedIn = true;
+	private boolean loggedIn = false;
 	private int employeeId = -1;
 	@Override
 	public String login(User user) throws NoSuchEmployeeException {

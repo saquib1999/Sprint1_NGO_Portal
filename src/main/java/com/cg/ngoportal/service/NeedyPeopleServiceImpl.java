@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.cg.ngoportal.controller.LoginCred;
 import com.cg.ngoportal.dao.NeedyPeopleDao;
 import com.cg.ngoportal.dao.RequestDao;
 import com.cg.ngoportal.dao.UserDao;
@@ -22,7 +21,7 @@ import com.cg.ngoportal.model.UserType;
 @Service
 public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 
-	private boolean loggedIn = true;
+	private boolean loggedIn = false;
 	private int needyPersonId = -1;
 
 	@Autowired

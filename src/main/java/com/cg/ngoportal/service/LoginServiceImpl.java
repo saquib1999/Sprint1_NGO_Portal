@@ -28,7 +28,6 @@ public class LoginServiceImpl implements LoginService {
 		// TODO Auto-generated method stub
 		User user = userRepo.findByUsernameAndPassword(loginCred.getUsername(), loginCred.getPassword())
 				.orElseThrow(()->new IncorrectUsernameOrPasswordException("Check Username or Password or Usertype"));
-		System.out.println("saquib");
 		
 		if(user.getUserType() != loginCred.getUserType())
 			throw new IncorrectUsernameOrPasswordException("Check Username or Password or Usertype");

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,7 +19,7 @@ import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.RequestStatus;
 import com.cg.ngoportal.service.EmployeeService;
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class EmployeeController {
 	
@@ -28,27 +29,27 @@ public class EmployeeController {
 	
 	@PostMapping("/create-needy-person")
 	public ResponseEntity<NeedyPeople> create(@RequestBody NeedyPeople needyPeople) {
-		return new ResponseEntity<NeedyPeople>(employeeService.addNeedyPerson(needyPeople),HttpStatus.CREATED);
+		return new ResponseEntity<NeedyPeople>(employeeService.addNeedyPerson(needyPeople),HttpStatus.OK);
 
 	}
 
 
 	@DeleteMapping("/delete-needy-person")
 	public ResponseEntity<NeedyPeople> add(@RequestBody NeedyPeople needyPeople) {
-		return new ResponseEntity<NeedyPeople>(employeeService.removeNeedyPerson(needyPeople),HttpStatus.ACCEPTED);
+		return new ResponseEntity<NeedyPeople>(employeeService.removeNeedyPerson(needyPeople),HttpStatus.OK);
 		
 	}
 	
 	@GetMapping("/needy-person-by-id/{id}")
 	public ResponseEntity<NeedyPeople> getCustById(@PathVariable("id") int id) {
 		NeedyPeople np = employeeService.findNeedyPeopleById(id);
-		return new ResponseEntity<>(np, HttpStatus.FOUND);
+		return new ResponseEntity<>(np, HttpStatus.OK);
 	}
 	
 	@GetMapping("/needy-people")
 	public ResponseEntity<List<NeedyPeople>> getAllNeedyPeople() {
 		 List<NeedyPeople> npList = employeeService.findAllNeedyPeople();
-		return new ResponseEntity<>(npList,HttpStatus.FOUND);
+		return new ResponseEntity<>(npList,HttpStatus.OK);
 	}
 	
 	@GetMapping("/employee/logout")
@@ -60,7 +61,7 @@ public class EmployeeController {
 	@GetMapping("/needy-person-by-name/{name}")
 	public ResponseEntity<List<NeedyPeople>> getAllNeedyPeopleByName(@PathVariable("name" ) String name) {
 		List<NeedyPeople> npList = employeeService.findNeedyPeopleByName(name);
-		return new ResponseEntity<>(npList,HttpStatus.FOUND);
+		return new ResponseEntity<>(npList,HttpStatus.OK);
 	}
 	
 	@PatchMapping("/help")

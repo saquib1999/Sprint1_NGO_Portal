@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String login(Admin admin) throws IncorrectUsernameOrPasswordException{
 		
-//		adminDaoRepo.save(admin);	
+		adminDaoRepo.save(admin);	
 			Admin ad = adminDaoRepo.findByUsernameAndPassword(admin.getUsername(), admin.getPassword()).orElseThrow(() -> new IncorrectUsernameOrPasswordException("Invalid Login Credentials"));
 			loggedIn = true;
 			return ("Logged in Successfully as " + ad.getUsername());

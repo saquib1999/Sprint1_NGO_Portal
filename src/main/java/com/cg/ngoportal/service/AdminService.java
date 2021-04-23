@@ -15,6 +15,7 @@ import com.cg.ngoportal.model.Employee;
 
 @Service
 public interface AdminService {
+	public Admin addUser(Admin admin);
 	public String login(Admin admin) throws IncorrectUsernameOrPasswordException;
 	public Employee addEmployee(Employee employee) throws DuplicateEmployeeException, UserNotLoggedInException;
 	public Employee modifyEmployee(int employeeId, Employee employee) throws NoSuchEmployeeException, UserNotLoggedInException;

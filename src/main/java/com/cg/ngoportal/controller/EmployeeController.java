@@ -28,7 +28,7 @@ public class EmployeeController {
 	
 	@PostMapping("/create-needy-person")
 	public ResponseEntity<NeedyPeople> create(@RequestBody NeedyPeople needyPeople) {
-		return new ResponseEntity<NeedyPeople>(employeeService.addNeedyPerson(needyPeople),HttpStatus.CREATED);
+		return new ResponseEntity<NeedyPeople>(employeeService.addNeedyPerson(needyPeople),HttpStatus.OK);
 
 	}
 
@@ -42,13 +42,13 @@ public class EmployeeController {
 	@GetMapping("/needy-person-by-id/{id}")
 	public ResponseEntity<NeedyPeople> getCustById(@PathVariable("id") int id) {
 		NeedyPeople np = employeeService.findNeedyPeopleById(id);
-		return new ResponseEntity<>(np, HttpStatus.FOUND);
+		return new ResponseEntity<>(np, HttpStatus.OK);
 	}
 	
 	@GetMapping("/needy-people")
 	public ResponseEntity<List<NeedyPeople>> getAllNeedyPeople() {
 		 List<NeedyPeople> npList = employeeService.findAllNeedyPeople();
-		return new ResponseEntity<>(npList,HttpStatus.FOUND);
+		return new ResponseEntity<>(npList,HttpStatus.OK);
 	}
 	
 	@GetMapping("/employee/logout")
@@ -60,12 +60,12 @@ public class EmployeeController {
 	@GetMapping("/needy-person-by-name/{name}")
 	public ResponseEntity<List<NeedyPeople>> getAllNeedyPeopleByName(@PathVariable("name" ) String name) {
 		List<NeedyPeople> npList = employeeService.findNeedyPeopleByName(name);
-		return new ResponseEntity<>(npList,HttpStatus.FOUND);
+		return new ResponseEntity<>(npList,HttpStatus.OK);
 	}
 	
 	@PatchMapping("/help")
 	public ResponseEntity<DonationDistribution> helpNeedyPerson(@RequestBody DonationDistribution donationDistribution) {
-		return new ResponseEntity<DonationDistribution>(employeeService.helpNeedyPerson(donationDistribution),HttpStatus.ACCEPTED);
+		return new ResponseEntity<DonationDistribution>(employeeService.helpNeedyPerson(donationDistribution),HttpStatus.OK);
 		
 	}
 	
@@ -78,17 +78,17 @@ public class EmployeeController {
 	
 	@GetMapping("/employee/pending-request")
 	public ResponseEntity<List<Request>> pendingRequestEmployeeLevel() {
-		return new ResponseEntity<List<Request>>(employeeService.checkPendingRequests(),HttpStatus.FOUND);
+		return new ResponseEntity<List<Request>>(employeeService.checkPendingRequests(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/approved-list")
 	public ResponseEntity<List<DonationDistribution>> approvedDonationList() {
-		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(),HttpStatus.FOUND);
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/distributed-list")
 	public ResponseEntity<List<DonationDistribution>> donatedList() {
-		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDistributedList(),HttpStatus.FOUND);
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDistributedList(),HttpStatus.OK);
 	}
 
 }

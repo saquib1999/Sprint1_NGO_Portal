@@ -81,8 +81,9 @@ public class AdminServiceImplTest {
 		elist = new ArrayList<>();
 		elistname = new ArrayList<>();
 		dlist = new ArrayList<>();
-		ad = new Admin("Parth123", "parth123");
-		ad1 = new Admin("Parth123", "parth");
+		User admin = new User("admin", "admin", UserType.ADMIN);
+		ad = new Admin(admin);
+		ad1 = new Admin(admin);
 		emp1 = new Employee("Parth", "parth@gmail.com", "9876543210", new Address("Pune", "Maharshtra", "411046", "Baner"), new User("parth123","parth", null), 1);
 		emp2 = new Employee("Sagar", "sagar@gmail.com", "8765432109", new Address("Mumbai", "Maharshtra", "400020", "Bandra"), new User("sagar123","sagar", null), 1);
 		emp3 = new Employee("Yash", "yash@gmail.com", "7654321098", new Address("Bangalore", "Karnataka", "456412", "SBI"), new User("yash123","yash", null), 1);
@@ -110,8 +111,9 @@ public class AdminServiceImplTest {
 	}
 	@Test
 	public void Testlogin() throws IncorrectUsernameOrPasswordException {
-		when(adminDaoRepo.findByUsernameAndPassword(ad.getUsername(), ad.getPassword())).thenReturn(Optional.of(ad));
-		Assertions.assertEquals("Logged in Successfully as " + ad.getUsername(), adminService.login(ad));
+		User admin = new User("admin", "admin", UserType.ADMIN);
+		when(adminDaoRepo.findByUserLoginDetails(admin)).thenReturn(Optional.of(ad));
+		Assertions.assertEquals("Logged in Successfully as " + ad.getUserLoginDetails().getUsername(), adminService.login(ad));
 	}
 	//working
 	@Test

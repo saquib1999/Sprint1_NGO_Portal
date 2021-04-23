@@ -19,7 +19,7 @@ public class LoginController {
 	@GetMapping("login")
 	public ResponseEntity<String> login(@RequestBody User loginCred){
 		
-		return new ResponseEntity<String>(loginService.login(loginCred),HttpStatus.ACCEPTED);
+		return new ResponseEntity<String>(loginService.login(loginCred),HttpStatus.OK);
 		
 	}
 

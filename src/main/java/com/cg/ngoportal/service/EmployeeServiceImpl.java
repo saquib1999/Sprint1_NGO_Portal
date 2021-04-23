@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cg.ngoportal.dao.DonationBoxDao;
@@ -42,6 +43,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	DonationBoxDao donationBoxRepo;
 	
 	@Autowired
+	private PasswordEncoder bcryptEncoder;
+
+	
+	@Autowired
 	private UserDao userRepo;
 	
 	@Autowired
@@ -69,6 +74,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 				if(person.getUserLoginDetails().getUserType()!= UserType.NEEDYPERSON)
 					throw new InvalidNeedyPersonObjectException("Check the User Type");
 				person.setName(person.getName().toUpperCase());
+				User user = person.getUserLoginDetails();
+				user.setPassword(bcryptEncoder.encode(user.getPassword()));
+				person.setUserLoginDetails(user);
 				person.getUserLoginDetails().setUserType(UserType.NEEDYPERSON);
 
 				return needyPeopleRepo.save(person);

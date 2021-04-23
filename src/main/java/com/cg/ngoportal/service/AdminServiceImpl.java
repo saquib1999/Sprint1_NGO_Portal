@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cg.ngoportal.dao.AdminDao;
@@ -26,6 +27,7 @@ import com.cg.ngoportal.model.DonationDistributionStatus;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.RequestStatus;
+import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
 
 @Service
@@ -36,6 +38,10 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Autowired
 	EmployeeDao employeeDaoRepo;
+	
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
+
 	
 	@Autowired
 	DonationDistributionDao donationdistributionDaoRepo;
@@ -53,10 +59,9 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String login(Admin admin) throws IncorrectUsernameOrPasswordException{
 		
-		adminDaoRepo.save(admin);	
-			Admin ad = adminDaoRepo.findByUsernameAndPassword(admin.getUsername(), admin.getPassword()).orElseThrow(() -> new IncorrectUsernameOrPasswordException("Invalid Login Credentials"));
-			loggedIn = true;
-			return ("Logged in Successfully as " + ad.getUsername());
+//			Admin ad = adminDaoRepo.findByUsernameAndPassword(admin.getUsername(), admin.getPassword()).orElseThrow(() -> new IncorrectUsernameOrPasswordException("Invalid Login Credentials"));
+//			loggedIn = true;
+			return ("Logged in Successfully as ");
 		
 	}
 	
@@ -66,6 +71,10 @@ public class AdminServiceImpl implements AdminService {
 		// TODO Auto-generated method stub
 		if(loggedIn) {
 			if(employeeDaoRepo.findByUsername(employee.getUserLoginDetails().getUsername()).isEmpty()) {
+				User user = employee.getUserLoginDetails();
+				user.setPassword(bcryptEncoder.encode(user.getPassword()));
+				employee.setUserLoginDetails(user);
+				
 				employee.getUserLoginDetails().setUserType(UserType.EMPLOYEE);
 				employee.setActive(1);
 				return employeeDaoRepo.save(employee);
@@ -232,6 +241,14 @@ public class AdminServiceImpl implements AdminService {
 		}
 		else
 			return "Could not Logout";
+	}
+
+
+	@Override
+	public Admin addUser(Admin admin) {
+
+		return adminDaoRepo.save(admin);	
+
 	}
 
 }

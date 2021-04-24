@@ -37,6 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             while(enumms.hasMoreElements()) {
             	System.out.println(enumms.nextElement());
             }
+        System.out.println(request.getHeaders("Authorization"));
 		final String requestTokenHeader = request.getHeader("Authorization");
 		
 		

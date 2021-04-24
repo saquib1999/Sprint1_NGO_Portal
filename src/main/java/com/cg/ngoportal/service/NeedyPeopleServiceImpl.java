@@ -23,7 +23,7 @@ import com.cg.ngoportal.model.UserType;
 public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 
 	private boolean loggedIn = true;
-	private int needyPersonId = -1;
+	private int needyPersonId = 1000;
 
 	@Autowired
 	NeedyPeopleDao needyPeopleRepo;
@@ -60,22 +60,17 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 	// Needy Person requests for help
 	@Override
 	public Request requestForHelp(Request request) throws UserNotLoggedInException {
-		if (loggedIn) {
 			request.setNeedyPersonId(needyPersonId);
 			return requestRepo.save(request);
-		} else
-			throw new UserNotLoggedInException("Please Log in.");
 
 	}
 
 	// Check the request status
 	@Override
 	public List<Request> requestStatusCheck() throws UserNotLoggedInException {
-		if (loggedIn) {
 			List<Request> request = requestRepo.findByNeedyPersonId(needyPersonId);
 			return request;
-		} else
-			throw new UserNotLoggedInException("Please Log in.");
+		
 	}
 
 	
@@ -83,15 +78,13 @@ public class NeedyPeopleServiceImpl implements NeedyPeopleService {
 	@Override
 	public NeedyPeople modifyNeedyPerson(NeedyPeople needyPerson)
 			throws NoSuchNeedyPersonException, UserNotLoggedInException {
-		if (loggedIn) {
 			NeedyPeople persontoUpdate = needyPeopleRepo.findById(needyPersonId).get();
 			persontoUpdate.setName(needyPerson.getName());
 			persontoUpdate.setPhone(needyPerson.getPhone());
 			persontoUpdate.setFamilyIncome(needyPerson.getFamilyIncome());
 			persontoUpdate.setAddress(needyPerson.getAddress());
 			return needyPeopleRepo.save(persontoUpdate);
-		} else
-			throw new UserNotLoggedInException("Please Log in.");
+	
 
 	}
 

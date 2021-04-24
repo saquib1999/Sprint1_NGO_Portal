@@ -73,8 +73,6 @@ public class DonorServiceImpl implements DonorService{
 
 	@Override
 	public Donation donateToNGO(Donation donation,SimpleMailMessage message) throws UserNotLoggedInException {
-
-		if(loggedIn==true) {
 			donation.setDonorId(donorId);
 			donation.setDateOfDonation(new Date());
 			DonationBox donationBox=donationBoxRepo.findByNgoName(donation.getNgo()).orElseThrow();
@@ -91,15 +89,11 @@ public class DonorServiceImpl implements DonorService{
 			message.setSubject("Thank You Mail");
 			mailSender.send(message);
 			return donationRepo.save(donation);
-		}
-		else {
-			throw new UserNotLoggedInException("Please Log In");
-		}
+		
 	}
 
 	@Override
 	public String sendCertificateToDonor() throws MessagingException, UserNotLoggedInException{
-		if(loggedIn) {
 
 			if (donationRepo.findByDonorIdOrderByIdDesc(donorId).size() == 0)
 				throw new NoDonationException("Please do the Donation First");
@@ -116,13 +110,6 @@ public class DonorServiceImpl implements DonorService{
 			mailSender.send(mimeMessage);
 			return "Certificate sent successfully to your Email";
 
-
-
-		}
-		else
-		{
-			throw new UserNotLoggedInException("Please Log In");
-		}
 	}
 
 	@Override
@@ -159,8 +146,6 @@ public class DonorServiceImpl implements DonorService{
 
 	@Override
 	public Donation lastDonationReceipt(SimpleMailMessage message) throws UserNotLoggedInException {
-
-		if(loggedIn) {
 			List<Donation> donationList = donationRepo.findByDonorIdOrderByIdDesc(donorId);
 			Donor donor=donorRepo.findById(donorId).get();
 			if(donationList.size() > 0){
@@ -175,18 +160,12 @@ public class DonorServiceImpl implements DonorService{
 				new NoDonationException("No Donation Found");
 			
 			return donationList.get(0);
-		}
-		else {
-			throw new UserNotLoggedInException("Please Log In");
-		}
+		
 
 	}
 
 	@Override
 	public List<Donation> allDonationReceipt(SimpleMailMessage message) throws UserNotLoggedInException {
-
-
-		if(loggedIn) {
 			List<Donation> donationList = donationRepo.findByDonorIdOrderByIdDesc(donorId);
 			Donor donor=donorRepo.findById(donorId).get();
 			if(donationList.size() > 0){
@@ -207,9 +186,7 @@ public class DonorServiceImpl implements DonorService{
 
 
 			return donationList;
-		}
-		else 
-			throw new UserNotLoggedInException("Please Log In");
+		
 
 	}
 

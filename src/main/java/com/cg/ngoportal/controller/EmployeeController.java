@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationItem;
+import com.cg.ngoportal.model.HttpRequestBody;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
 import com.cg.ngoportal.model.RequestStatus;
@@ -67,15 +68,18 @@ public class EmployeeController {
 	
 	@PatchMapping("/help")
 	public ResponseEntity<DonationDistribution> helpNeedyPerson(@RequestBody DonationDistribution donationDistribution) {
+		System.out.println(donationDistribution);
 		return new ResponseEntity<DonationDistribution>(employeeService.helpNeedyPerson(donationDistribution),HttpStatus.OK);
 		
 	}
 	
 	@PostMapping("/employee/approve")
-	public ResponseEntity<DonationDistribution> approveRequest(@RequestBody Request request ) {
+	public ResponseEntity<DonationDistribution> approveRequest(@RequestBody HttpRequestBody requestBody) {
+		int employeeId = requestBody.getId();
+		Request request = requestBody.getRequest();
 		if (request.getStatus() == RequestStatus.REJECTED_BY_EMPLOYEE)
-			return new ResponseEntity<>(employeeService.approveDonationDistributionEmployeeLevel(request, null), HttpStatus.CONFLICT);
-		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistributionEmployeeLevel(request, new DonationDistribution(new DonationItem())),HttpStatus.ACCEPTED);
+			return new ResponseEntity<>(employeeService.approveDonationDistributionEmployeeLevel(employeeId, request, null), HttpStatus.CONFLICT);
+		return new ResponseEntity<DonationDistribution>(employeeService.approveDonationDistributionEmployeeLevel(employeeId, request, new DonationDistribution(new DonationItem())),HttpStatus.ACCEPTED);
 	}
 	
 	@GetMapping("/employee/pending-request")
@@ -83,14 +87,18 @@ public class EmployeeController {
 		return new ResponseEntity<List<Request>>(employeeService.checkPendingRequests(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/approved-list")
-	public ResponseEntity<List<DonationDistribution>> approvedDonationList() {
-		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(),HttpStatus.OK);
+	@GetMapping("/approved-list/{id}")
+	public ResponseEntity<List<DonationDistribution>> approvedDonationList(@PathVariable("id" ) int employeeId) {
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkApprovedDistribution(employeeId),HttpStatus.OK);
 	}
 	
-	@GetMapping("/distributed-list")
-	public ResponseEntity<List<DonationDistribution>> donatedList() {
-		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDistributedList(),HttpStatus.OK);
+	@GetMapping("/distributed-list/{id}")
+	public ResponseEntity<List<DonationDistribution>> donatedList(@PathVariable("id" ) int employeeId) {
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkDistributedList(employeeId),HttpStatus.OK);
+	}
+	@GetMapping("/pending-list/{id}")
+	public ResponseEntity<List<DonationDistribution>> pendingList(@PathVariable("id" ) int employeeId) {
+		return new ResponseEntity<List<DonationDistribution>>(employeeService.checkPendingList(employeeId),HttpStatus.OK);
 	}
 
 }

@@ -52,17 +52,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private RequestDao requestRepo;
 	
-	private boolean loggedIn = true;
-	private int employeeId = 1000;
 	@Override
 	public String login(User user) throws NoSuchEmployeeException {
-		
+
 		Employee employee = employeeRepo.findByUserLoginDetails(user).get();
 		
 		if(employee.getActive() != 1)
 			throw new NoSuchEmployeeException("Inactive Employee");
-		loggedIn = true;
-		employeeId = employee.getId();
 		return "Employee Logged In as "+ user.getUsername();
 	}
 
@@ -138,13 +134,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public boolean logOut() {
-		loggedIn = false;
-		employeeId = -1;
+		
 		return true;
 	}
 
+	
 	@Override
-	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException, DataIntegrityViolationException {
+	public DonationDistribution approveDonationDistributionEmployeeLevel(int employeeId, Request request, DonationDistribution distribution) throws UserNotLoggedInException, DataIntegrityViolationException {
 					
 			if (request.getStatus() == RequestStatus.REJECTED_BY_EMPLOYEE) {
 				requestRepo.save(request);
@@ -165,7 +161,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 		
 	@Override
-	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException {
+	public List<DonationDistribution> checkApprovedDistribution(int employeeId) throws UserNotLoggedInException {
 		
 					
 			return donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.APPROVED, employeeRepo.findById(employeeId).get());
@@ -179,10 +175,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<DonationDistribution> checkDistributedList() throws UserNotLoggedInException {
+	public List<DonationDistribution> checkDistributedList(int employeeId) throws UserNotLoggedInException {
 			
 			return donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.FUND_DISBURSED, employeeRepo.findById(employeeId).get());
 		
+	}
+
+	@Override
+	public List<DonationDistribution> checkPendingList(int employeeId) throws UserNotLoggedInException {
+		// TODO Auto-generated method stub
+		return donationDistributionRepo.findByStatusAndDistributedBy(DonationDistributionStatus.PENDING, employeeRepo.findById(employeeId).get());
 	}
 	
 	

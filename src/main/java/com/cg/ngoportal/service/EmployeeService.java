@@ -1,6 +1,8 @@
 package com.cg.ngoportal.service;
 
 import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.cg.ngoportal.exception.DuplicateNeedyPersonException;
 import com.cg.ngoportal.exception.InvalidNeedyPersonObjectException;
@@ -21,9 +23,12 @@ public interface EmployeeService {
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws UserNotLoggedInException;
 	public List<NeedyPeople> findAllNeedyPeople() throws UserNotLoggedInException;
 	public DonationDistribution helpNeedyPerson(DonationDistribution distribute) throws UserNotLoggedInException;
-	public DonationDistribution approveDonationDistributionEmployeeLevel(Request request, DonationDistribution distribution) throws UserNotLoggedInException;
-	public List<DonationDistribution> checkApprovedDistribution() throws UserNotLoggedInException;
+	public DonationDistribution approveDonationDistributionEmployeeLevel(int employeeId,Request request, DonationDistribution distribution) throws UserNotLoggedInException;
+	public List<DonationDistribution> checkApprovedDistribution(int employeeId) throws UserNotLoggedInException;
 	public List<Request> checkPendingRequests() throws UserNotLoggedInException;
-	public List<DonationDistribution> checkDistributedList() throws UserNotLoggedInException;
+	public List<DonationDistribution> checkDistributedList(int employeeId) throws UserNotLoggedInException;
 	public boolean logOut();
+	public List<DonationDistribution> checkPendingList(int employeeId) throws UserNotLoggedInException;
+
+	
 }

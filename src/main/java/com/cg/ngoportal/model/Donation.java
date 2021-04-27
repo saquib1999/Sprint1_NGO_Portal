@@ -25,20 +25,121 @@ public class Donation {
 	@OneToOne(cascade = CascadeType.ALL)
 	private DonationItem item;
 	private double amount;
+	private String cardNumber;
+	private String nameOnCard;
+	private int cvvNumber;
 	private Date dateOfDonation;
+	private String description;
 	private String ngo;
+	private String expiryDate;
 	
 	
-	public Donation(DonationItem item, double amount) {
-		super();
-		this.item = item;
-		this.amount = amount;
+
+
+	public String getExpiryDate() {
+		return expiryDate;
 	}
+
+
+	public void setExpiryDate(String expiryDate) {
+		this.expiryDate = expiryDate;
+	}
+
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+
+	public String getNameOnCard() {
+		return nameOnCard;
+	}
+
+
+	public void setNameOnCard(String nameOnCard) {
+		this.nameOnCard = nameOnCard;
+	}
+
+
+	public int getCvvNumber() {
+		return cvvNumber;
+	}
+
+
+	public void setCvvNumber(int cvvNumber) {
+		this.cvvNumber = cvvNumber;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	
-	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation) {
+	public Donation(int donorId, DonationItem item, double amount, String cardNumber, String nameOnCard, int cvvNumber,
+			Date dateOfDonation, String description, String ngo, String expiryDate) {
 		super();
 		this.donorId = donorId;
 		this.item = item;
+		this.amount = amount;
+		this.cardNumber = cardNumber;
+		this.nameOnCard = nameOnCard;
+		this.cvvNumber = cvvNumber;
+		this.dateOfDonation = dateOfDonation;
+		this.description = description;
+		this.ngo = ngo;
+		this.expiryDate = expiryDate;
+	}
+
+
+	public Donation(int donorId, double amount, String cardNumber, String nameOnCard, int cvvNumber,
+			Date dateOfDonation, String description, String ngo, String expiryDate) {
+		super();
+		this.donorId = donorId;
+		this.amount = amount;
+		this.cardNumber = cardNumber;
+		this.nameOnCard = nameOnCard;
+		this.cvvNumber = cvvNumber;
+		this.dateOfDonation = dateOfDonation;
+		this.description = description;
+		this.ngo = ngo;
+		this.expiryDate = expiryDate;
+	}
+
+
+	public Donation(double amount, String cardNumber, String nameOnCard, int cvvNumber, Date dateOfDonation,
+			String description, String ngo) {
+		super();
+		this.amount = amount;
+		this.cardNumber = cardNumber;
+		this.nameOnCard = nameOnCard;
+		this.cvvNumber = cvvNumber;
+		this.dateOfDonation = dateOfDonation;
+		this.description = description;
+		this.ngo = ngo;
+	}
+	
+	
+//	public Donation(DonationItem item, double amount) {
+//		super();
+//		this.item = item;
+//		this.amount = amount;
+//	}
+//	
+	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation) {
+		super();
+		this.donorId = donorId;
+//		this.item = item;
 		this.amount = amount;
 		this.dateOfDonation = dateOfDonation;
 	}
@@ -50,7 +151,7 @@ public class Donation {
 	public Donation(int donorId, DonationItem item, double amount, Date dateOfDonation, String ngo) {
 		super();
 		this.donorId = donorId;
-		this.item = item;
+//		this.item = item;
 		this.amount = amount;
 		this.dateOfDonation = dateOfDonation;
 		this.ngo = ngo;
@@ -112,11 +213,18 @@ public class Donation {
 		this.ngo = ngo;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Donation [id=" + id + ", donorId=" + donorId + ", item=" + item + ", amount=" + amount
-				+ ", dateOfDonation=" + dateOfDonation + ", ngo=" + ngo + "]";
+		return "Donation [donorId=" + donorId + ", amount=" + amount + ", cardNumber=" + cardNumber + ", nameOnCard="
+				+ nameOnCard + ", dateOfDonation=" + dateOfDonation + ", description=" + description + ", ngo=" + ngo
+				+ ", expiryDate=" + expiryDate + "]";
 	}
+
+
+	
+
+	
 
 	
 

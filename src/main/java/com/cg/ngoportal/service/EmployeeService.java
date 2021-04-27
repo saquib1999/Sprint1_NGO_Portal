@@ -18,7 +18,7 @@ import com.cg.ngoportal.model.User;
 public interface EmployeeService {
 	public String login(User user)throws NoSuchEmployeeException;
 	public NeedyPeople addNeedyPerson(NeedyPeople person) throws  UserNotLoggedInException, DuplicateNeedyPersonException, InvalidNeedyPersonObjectException;
-	public NeedyPeople removeNeedyPerson(NeedyPeople person) throws UserNotLoggedInException, NoSuchNeedyPersonException;
+	public NeedyPeople removeNeedyPerson(int id) throws UserNotLoggedInException, NoSuchNeedyPersonException;
 	public NeedyPeople findNeedyPeopleById(int id) throws UserNotLoggedInException, NoSuchNeedyPersonException;
 	public List<NeedyPeople> findNeedyPeopleByName(String name) throws UserNotLoggedInException;
 	public List<NeedyPeople> findAllNeedyPeople() throws UserNotLoggedInException;

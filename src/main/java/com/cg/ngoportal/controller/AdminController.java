@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,14 +30,14 @@ public class AdminController {
 		//working
 		@GetMapping("/admin/login")
 		public ResponseEntity<String> login(@RequestBody Admin admin){
-			return new ResponseEntity<String>(adminService.login(admin), HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>(adminService.login(admin), HttpStatus.OK);
 		}
 		//createEmployee
 		//working
 		@PostMapping("/add-employee")
 		public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee) {
 			adminService.addEmployee(employee);
-			return new ResponseEntity<Employee>(employee, HttpStatus.CREATED);
+			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 		}
 		
 		//working
@@ -46,11 +47,11 @@ public class AdminController {
 			return new ResponseEntity<Employee>(adminService.modifyEmployee(employee.getId(), employee), HttpStatus.OK);
 		}
 		
+		//working
 		//deleteEmployee 
-		@DeleteMapping("/delete-employee/{username}")
-		public String deleteEmployee(@PathVariable String username) {
-			adminService.removeEmployee(username);
-			return "Deleted";
+		@GetMapping("/delete-employee/{username}")
+		public ResponseEntity<Employee> deleteEmployee(@PathVariable String username) {
+			return new ResponseEntity<Employee>(adminService.removeEmployee(username), HttpStatus.OK);
 		}
 		
 		//working
@@ -66,6 +67,7 @@ public class AdminController {
 		public ResponseEntity<List<Employee>> findEmployeeByName(@PathVariable String name){
 			return new ResponseEntity<List<Employee>>(adminService.findEmployeeByName(name), HttpStatus.OK);
 		}
+		
 		//working
 		//find AllEmployees
 		@GetMapping("/find-all-employees")
@@ -79,26 +81,30 @@ public class AdminController {
 		}
 		
 		//approveDonations
-		@PutMapping("/approve-donation")
+		@PatchMapping("/approve-donation")
 		public ResponseEntity<DonationDistribution> approveDonation(@RequestBody DonationDistribution dd)  {
-			return new ResponseEntity<DonationDistribution>(adminService.approveDonation(dd), HttpStatus.ACCEPTED);
+			return new ResponseEntity<DonationDistribution>(adminService.approveDonation(dd), HttpStatus.OK);
 		}
 		
-		@PostMapping("/add-ngo")
-		public ResponseEntity<DonationBox> addNgo(@RequestBody DonationBox db) {
-			return new ResponseEntity<DonationBox>(adminService.addNgo(db), HttpStatus.ACCEPTED);
-		}
-		
+		//working
 		@GetMapping("/find-all-ngos")
 		public ResponseEntity<List<DonationBox>> findAllNgo()  {
 			return new ResponseEntity<List<DonationBox>>(adminService.findAllNgo(), HttpStatus.OK);
 		}
 		
-		//working
+		
+		@PostMapping("/add-ngo")
+		public ResponseEntity<DonationBox> addNgo(@RequestBody DonationBox db) {
+			return new ResponseEntity<DonationBox>(adminService.addNgo(db), HttpStatus.OK);
+		}
 		//logout
 		@GetMapping("/admin/logout")
 		public ResponseEntity<String> logout(){
-			return new ResponseEntity<String>(adminService.logout(), HttpStatus.ACCEPTED);
+			return new ResponseEntity<String>(adminService.logout(), HttpStatus.OK);
+		}
+		@GetMapping("/donation/{id}")
+		public ResponseEntity<DonationDistribution> findDonationById(@PathVariable int id){
+			return new ResponseEntity<DonationDistribution>(adminService.findDonationDistribution(id), HttpStatus.OK);
 		}
 		
 }

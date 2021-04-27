@@ -19,7 +19,7 @@ public interface AdminService {
 	public String login(Admin admin) throws IncorrectUsernameOrPasswordException;
 	public Employee addEmployee(Employee employee) throws DuplicateEmployeeException, UserNotLoggedInException;
 	public Employee modifyEmployee(int employeeId, Employee employee) throws NoSuchEmployeeException, UserNotLoggedInException;
-	public boolean removeEmployee(String username) throws NoSuchEmployeeException, UserNotLoggedInException;
+	public Employee removeEmployee(String username) throws NoSuchEmployeeException, UserNotLoggedInException;
 	public Employee findEmployeeById(int employeeId) throws NoSuchEmployeeException, UserNotLoggedInException;
 	public List<Employee> findEmployeeByName(String name) throws NoSuchEmployeeException, UserNotLoggedInException;
 	public List<Employee> findAllEmployee() throws NoSuchEmployeeException, UserNotLoggedInException;
@@ -28,4 +28,5 @@ public interface AdminService {
 	public String logout();
 	public DonationBox addNgo(DonationBox newNgo) throws UserNotLoggedInException;
 	public List<DonationBox> findAllNgo() throws UserNotLoggedInException;
+	public DonationDistribution findDonationDistribution(int id);
 }

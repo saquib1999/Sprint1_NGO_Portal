@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDistributionDao;
+import com.cg.ngoportal.dao.EmailAndUsernamDao;
 import com.cg.ngoportal.dao.EmployeeDao;
 import com.cg.ngoportal.dao.NeedyPeopleDao;
 import com.cg.ngoportal.dao.RequestDao;
@@ -23,6 +24,7 @@ import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.DonationBox;
 import com.cg.ngoportal.model.DonationDistribution;
 import com.cg.ngoportal.model.DonationDistributionStatus;
+import com.cg.ngoportal.model.EmailAndUsername;
 import com.cg.ngoportal.model.Employee;
 import com.cg.ngoportal.model.NeedyPeople;
 import com.cg.ngoportal.model.Request;
@@ -52,6 +54,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private RequestDao requestRepo;
 	
+	@Autowired
+	private EmailAndUsernamDao uniqueRepo;
+	
 	@Override
 	public String login(User user) throws NoSuchEmployeeException {
 
@@ -73,8 +78,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 				user.setPassword(bcryptEncoder.encode(user.getPassword()));
 				person.setUserLoginDetails(user);
 				person.getUserLoginDetails().setUserType(UserType.NEEDYPERSON);
-
-				return needyPeopleRepo.save(person);
+				NeedyPeople result = needyPeopleRepo.save(person);
+				EmailAndUsername emailAndUsername = new EmailAndUsername();
+				emailAndUsername.setEmail(result.getUserLoginDetails().getUsername());
+				uniqueRepo.save(emailAndUsername);
+				return result;
 			}
 			else 
 				throw new DuplicateNeedyPersonException("Needy person already exist");
@@ -82,10 +90,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public NeedyPeople removeNeedyPerson(NeedyPeople person) throws UserNotLoggedInException, NoSuchNeedyPersonException {
-			User user = userRepo.findByUsername(person.getUserLoginDetails().getUsername()).orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
-			NeedyPeople deleteNeedyPerson = needyPeopleRepo.findByUserLoginDetails(user)
-					.orElseThrow(()->new NoSuchNeedyPersonException("Please Check the Needy Person Details"));
+	public NeedyPeople removeNeedyPerson(int id) throws UserNotLoggedInException, NoSuchNeedyPersonException {
+		NeedyPeople deleteNeedyPerson = needyPeopleRepo.findById(id).get();
+
 			
 			needyPeopleRepo.delete(deleteNeedyPerson);
 			return deleteNeedyPerson;

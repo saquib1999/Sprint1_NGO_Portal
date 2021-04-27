@@ -11,6 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,15 +32,15 @@ public class DonorController {
 	}
 	
 	
-	@PostMapping("/donate")
-	public ResponseEntity<Donation> donateToNGO(@RequestBody Donation donation)   {	
+	@PostMapping("/donate/{id}")
+	public ResponseEntity<Donation> donateToNGO(@RequestBody Donation donation,@PathVariable int id)   {	
 		
-		return new ResponseEntity<Donation>(donorService.donateToNGO(donation,new SimpleMailMessage()), HttpStatus.ACCEPTED);
+		return new ResponseEntity<Donation>(donorService.donateToNGO(donation,id,new SimpleMailMessage()), HttpStatus.ACCEPTED);
 	}
-	@GetMapping("/send-certificate")
-	public ResponseEntity<String> sendCertificateToDonor() throws MessagingException    {	
+	@GetMapping("/send-certificate/{id}")
+	public ResponseEntity<String> sendCertificateToDonor(@PathVariable int id) throws MessagingException    {	
 		
-		return new ResponseEntity<String>(donorService.sendCertificateToDonor(), HttpStatus.OK);
+		return new ResponseEntity<String>(donorService.sendCertificateToDonor(id), HttpStatus.OK);
 	}
 	@GetMapping("/donor/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody LoginCred login) {	
@@ -52,14 +53,14 @@ public class DonorController {
 		return new ResponseEntity<String>(donorService.resetPassword(resetPassword.getUsername(),resetPassword.getOldpassword(),resetPassword.getNewpassword()), HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/receipts/last")
-	public ResponseEntity<Donation> getLastReceipt()  {
-		return new ResponseEntity<Donation>(donorService.lastDonationReceipt(new SimpleMailMessage()),HttpStatus.OK);
+	@GetMapping("/receipts/last/{id}")
+	public ResponseEntity<Donation> getLastReceipt(@PathVariable int id)  {
+		return new ResponseEntity<Donation>(donorService.lastDonationReceipt(new SimpleMailMessage(),id),HttpStatus.OK);
 	}
 	
-	@GetMapping("/receipts/all")
-	public ResponseEntity<List<Donation>> getAllReceipt()  {
-		return new ResponseEntity<List<Donation>>(donorService.allDonationReceipt(new SimpleMailMessage()),HttpStatus.OK);
+	@GetMapping("/receipts/all/{id}")
+	public ResponseEntity<List<Donation>> getAllReceipt(@PathVariable int id)  {
+		return new ResponseEntity<List<Donation>>(donorService.allDonationReceipt(new SimpleMailMessage(),id),HttpStatus.OK);
 	}
 	
 		
@@ -68,6 +69,9 @@ public class DonorController {
 		return new ResponseEntity<String>(donorService.logOut(),HttpStatus.OK);
 
 	}
-	
+	@GetMapping("/find-donor-by-id/{id}")
+	public ResponseEntity<Donor> findDonorById(@PathVariable int id) {
+		return new ResponseEntity<Donor>(donorService.getDonorById(id), HttpStatus.OK);
+	}
 	
 }

@@ -16,11 +16,10 @@ public interface NeedyPeopleService {
 	
 	public NeedyPeople register(NeedyPeople person) throws DuplicateNeedyPersonException;
 	public String login(User user) throws NoSuchNeedyPersonException;
-	public Request requestForHelp(Request request) throws UserNotLoggedInException;
-	public List<Request> requestStatusCheck() throws UserNotLoggedInException;
+	public Request requestForHelp(Request request, int needyPersonId) throws UserNotLoggedInException;
+	public List<Request> requestStatusCheck(int needyPersonId) throws UserNotLoggedInException;
 	public String logOut();
-	public NeedyPeople modifyNeedyPerson(NeedyPeople needyPerson) throws NoSuchNeedyPersonException, UserNotLoggedInException;
-	 
-	
-	
+	public NeedyPeople modifyNeedyPerson(NeedyPeople needyPerson, int needyPersonId) throws NoSuchNeedyPersonException, UserNotLoggedInException;
+	public NeedyPeople getNeedyPersonById(int needyPersonId) throws NoSuchNeedyPersonException, UserNotLoggedInException;
+	 	
 }

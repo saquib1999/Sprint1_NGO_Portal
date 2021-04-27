@@ -102,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public boolean removeEmployee(String username) throws NoSuchEmployeeException, UserNotLoggedInException {
+	public Employee removeEmployee(String username) throws NoSuchEmployeeException, UserNotLoggedInException {
 		// TODO Auto-generated method stub
 			Optional<Employee> emp = employeeDaoRepo.findByUsername(username);
 			
@@ -110,8 +110,8 @@ public class AdminServiceImpl implements AdminService {
 				throw new NoSuchEmployeeException("Employee Details not found");
 			else {
 				emp.get().setActive(0);
-				employeeDaoRepo.save(emp.get());
-				return true;
+				return employeeDaoRepo.save(emp.get());
+				
 			}
 		
 	}
@@ -210,4 +210,13 @@ public class AdminServiceImpl implements AdminService {
 
 	}
 
+
+	@Override
+	public DonationDistribution findDonationDistribution(int id) {
+		// TODO Auto-generated method stub
+		 return donationdistributionDaoRepo.findById(id).get();
+		
+	}
+	
+	
 }

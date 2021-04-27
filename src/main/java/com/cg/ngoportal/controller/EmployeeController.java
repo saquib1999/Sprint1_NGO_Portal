@@ -36,9 +36,9 @@ public class EmployeeController {
 	}
 
 
-	@DeleteMapping("/delete-needy-person")
-	public ResponseEntity<NeedyPeople> add(@RequestBody NeedyPeople needyPeople) {
-		return new ResponseEntity<NeedyPeople>(employeeService.removeNeedyPerson(needyPeople),HttpStatus.ACCEPTED);
+	@DeleteMapping("/delete-needy-person/{id}")
+	public ResponseEntity<NeedyPeople> add(@PathVariable int id) {
+		return new ResponseEntity<NeedyPeople>(employeeService.removeNeedyPerson(id),HttpStatus.OK);
 		
 	}
 	

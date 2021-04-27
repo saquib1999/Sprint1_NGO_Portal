@@ -15,6 +15,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.cg.ngoportal.dao.DonationBoxDao;
 import com.cg.ngoportal.dao.DonationDao;
@@ -26,6 +27,8 @@ import com.cg.ngoportal.exception.NoSuchDonorException;
 import com.cg.ngoportal.exception.UserNotLoggedInException;
 import com.cg.ngoportal.model.Donation;
 import com.cg.ngoportal.model.DonationBox;
+import com.cg.ngoportal.model.DonationItem;
+import com.cg.ngoportal.model.DonationType;
 import com.cg.ngoportal.model.Donor;
 import com.cg.ngoportal.model.User;
 import com.cg.ngoportal.model.UserType;
@@ -42,12 +45,13 @@ public class DonorServiceImpl implements DonorService{
 	JavaMailSender mailSender;
 	@Autowired
 	DonationBoxDao donationBoxRepo;
-
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 
 
 
 	private boolean loggedIn = true;
-	private int donorId=1000;
+//	private int donorId=1000;
 	private String adminEmail = "aladdin.aladdin0708@gmail.com"; 
 
 
@@ -56,7 +60,11 @@ public class DonorServiceImpl implements DonorService{
 
 		Optional<User> user = userRepo.findByUsername(donor.getUserLoginDetails().getUsername());
 		if(user.isEmpty()) 
-		{donor.getUserLoginDetails().setUserType(UserType.DONOR);
+		{
+			User user2 = donor.getUserLoginDetails();
+			user2.setPassword(bcryptEncoder.encode(user2.getPassword()));
+			donor.setUserLoginDetails(user2);
+			donor.getUserLoginDetails().setUserType(UserType.DONOR);
 		donorRepo.save(donor);}
 		else 
 			throw new DuplicateDonorException("Username is already taken.");
@@ -67,21 +75,21 @@ public class DonorServiceImpl implements DonorService{
 	public String login(User user) throws NoSuchDonorException {
 
 		loggedIn=true;
-		this.donorId=donorRepo.findByUserLoginDetails(user).get().getId();
+//		this.donorId=donorRepo.findByUserLoginDetails(user).get().getId();
 		return "Donor Logged In  as " + user.getUsername();
 	}
 
 	@Override
-	public Donation donateToNGO(Donation donation,SimpleMailMessage message) throws UserNotLoggedInException {
+	public Donation donateToNGO(Donation donation,int donorId,SimpleMailMessage message) throws UserNotLoggedInException {
 			donation.setDonorId(donorId);
 			donation.setDateOfDonation(new Date());
+			donation.setItem(new DonationItem(DonationType.MONEY,"Donate"));
 			DonationBox donationBox=donationBoxRepo.findByNgoName(donation.getNgo()).orElseThrow();
 			System.out.println(donationBox.getTotalCollection());
-			System.out.println(donation.getItem().getItem().getVal());
-			donationBox.setTotalCollection(donationBox.getTotalCollection()+(donation.getAmount()*donation.getItem().getItem().getVal()));
+//			System.out.println(donation.getItem().getItem().getVal());
+			donationBox.setTotalCollection(donationBox.getTotalCollection()+(donation.getAmount()));
 			System.out.println(donationBox.getTotalCollection());
 			donationBoxRepo.save(donationBox);
-
 			Donor donor=donorRepo.findById(donorId).orElseThrow();
 			message.setFrom(adminEmail);
 			message.setTo(donor.getEmail());
@@ -93,7 +101,7 @@ public class DonorServiceImpl implements DonorService{
 	}
 
 	@Override
-	public String sendCertificateToDonor() throws MessagingException, UserNotLoggedInException{
+	public String sendCertificateToDonor(int donorId) throws MessagingException, UserNotLoggedInException{
 
 			if (donationRepo.findByDonorIdOrderByIdDesc(donorId).size() == 0)
 				throw new NoDonationException("Please do the Donation First");
@@ -139,13 +147,13 @@ public class DonorServiceImpl implements DonorService{
 	public String logOut() {
 
 		loggedIn = false;
-		donorId = -1;
+//		donorId = -1;
 		return "Logged Out!";
 
 	}
 
 	@Override
-	public Donation lastDonationReceipt(SimpleMailMessage message) throws UserNotLoggedInException {
+	public Donation lastDonationReceipt(SimpleMailMessage message,int donorId) throws UserNotLoggedInException {
 			List<Donation> donationList = donationRepo.findByDonorIdOrderByIdDesc(donorId);
 			Donor donor=donorRepo.findById(donorId).get();
 			if(donationList.size() > 0){
@@ -165,7 +173,7 @@ public class DonorServiceImpl implements DonorService{
 	}
 
 	@Override
-	public List<Donation> allDonationReceipt(SimpleMailMessage message) throws UserNotLoggedInException {
+	public List<Donation> allDonationReceipt(SimpleMailMessage message,int donorId) throws UserNotLoggedInException {
 			List<Donation> donationList = donationRepo.findByDonorIdOrderByIdDesc(donorId);
 			Donor donor=donorRepo.findById(donorId).get();
 			if(donationList.size() > 0){
@@ -190,7 +198,10 @@ public class DonorServiceImpl implements DonorService{
 
 	}
 
-
+	public Donor getDonorById(int donorId) throws NoSuchDonorException, UserNotLoggedInException {
+		return donorRepo.findById(donorId)
+				.orElseThrow(()-> new NoSuchDonorException("Details not found"));
+	}
 
 
 
